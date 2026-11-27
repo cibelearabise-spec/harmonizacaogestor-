@@ -1,0 +1,703 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#33202b">
+<title>Harmonização Gestor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#2b1f22;--muted:#7d6c6f;--line:#eadfda;--paper:#f8f2ee;--plum:#33202b;--plum2:#4a2b3d;--rose:#b76e79;--rose-d:#9a5560;--blush:#f4e5e2;--gold:#c9a36a;--ok:#2f7a4f;--ok-t:#dcefe3;--warn:#8a5a00;--warn-t:#fbeccb;--red:#b4324a;--red-t:#fbe4e8;--blue:#2f5f9a;--blue-t:#e0eaf6}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0}
+body{font-family:'Manrope',system-ui,sans-serif;background:#2a1b24;color:var(--ink);font-size:15px;line-height:1.5;padding:20px}
+h1,h2,h3{margin:0;font-weight:700;letter-spacing:-.02em}
+h1,h2.serif,.serif{font-family:'Cormorant Garamond',Georgia,serif}
+h2{font-size:21px}h3{font-size:16px}
+button{font-family:inherit}
+:focus-visible{outline:2px solid var(--rose);outline-offset:2px}
+img[data-img]:not([src]){visibility:hidden}
+.frame{max-width:1200px;margin:0 auto;background:var(--paper);border-radius:30px;overflow:hidden;min-height:calc(100vh - 40px)}
+.muted{color:var(--muted)}.mt{margin-top:14px}.mb{margin-bottom:12px}.sp{flex:1;min-width:0}.c{text-align:center}
+.row{display:flex;align-items:center;gap:10px}.row input{flex:1;width:auto}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.grid4{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:16px;margin-top:16px}
+.list{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:10px}.list .empty{grid-column:1/-1}
+.narrow{max-width:780px}.pre{white-space:pre-wrap;margin:6px 0 0}
+.hint{color:var(--muted);font-size:13px;margin:10px 2px}
+.banner{display:block;width:100%;text-align:left;border:0;background:var(--warn-t);color:var(--warn);border-radius:14px;padding:10px 14px;font:600 13px 'Manrope',sans-serif;margin-bottom:14px;cursor:pointer}
+.banner.red{background:var(--red-t);color:var(--red);cursor:default}
+.banner.rose{background:var(--blush);color:var(--rose-d)}
+.band{color:#fff;background:radial-gradient(700px 260px at 15% -60%,rgba(201,163,106,.4),transparent 70%),linear-gradient(180deg,#3d2433,#2a1a23)}
+.topbar{display:flex;align-items:center;gap:16px;padding:20px 32px}
+.brand{display:flex;align-items:center;gap:10px;cursor:pointer}
+.brand svg{color:var(--gold)}
+.brand b{display:block;font:700 26px 'Cormorant Garamond',serif;letter-spacing:-.01em;line-height:1}
+.brand small{display:block;font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;opacity:.75;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pills{display:flex;gap:2px;margin:0 auto;padding:5px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14)}
+.pills>button,.pills .dd>button{background:none;border:0;color:rgba(255,255,255,.92);font-weight:600;font-size:13.5px;padding:8px 14px;border-radius:999px;cursor:pointer;display:inline-flex;gap:6px;align-items:center}
+.pills button.on{background:#fff;color:var(--plum)}
+.nb{background:var(--rose);color:#fff;border-radius:999px;font-size:11px;font-weight:800;padding:1px 7px;min-width:20px;text-align:center}
+.dd{position:relative}
+.pills .pop{display:none;position:absolute;top:calc(100% + 12px);right:0;min-width:230px;background:#fff;border-radius:20px;padding:8px;box-shadow:0 20px 44px rgba(0,0,0,.3);z-index:40}
+.pills .dd.open .pop{display:block}
+.pills .pop button{display:block;width:100%;text-align:left;background:none;color:var(--ink);padding:10px 14px;border-radius:12px;font-weight:600;font-size:14px;border:0;cursor:pointer}
+.pills .pop button:hover{background:var(--blush)}
+.cta{display:inline-flex;align-items:center;gap:10px;background:var(--rose);color:#fff;border:0;border-radius:999px;padding:6px 6px 6px 20px;font-weight:700;font-size:14px;cursor:pointer}
+.cta .ar{width:34px;height:34px;border-radius:50%;background:#fff;color:var(--plum);display:grid;place-items:center}
+.hero-in{padding:34px 32px 44px;max-width:700px}
+.eyebrow{color:var(--gold);font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin:0 0 12px}
+.hero-in h1{font-size:clamp(36px,5.4vw,60px);line-height:1;margin:0 0 14px}
+.hero-in .sub{color:rgba(255,255,255,.88);margin:0 0 22px;max-width:480px}
+.page{padding:32px 40px 56px}
+.head{display:flex;align-items:center;gap:12px;margin:0 0 20px;flex-wrap:wrap}
+.head h1{font-size:clamp(30px,3.6vw,40px)}.head h1.sm{font:700 22px 'Manrope',sans-serif;letter-spacing:-.02em}
+.icon{flex:none;width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:#fff;color:var(--ink);display:grid;place-items:center;cursor:pointer}
+.icon.sm{width:32px;height:32px}
+.card{background:#fff;border:1px solid var(--line);border-radius:22px;padding:18px}
+.card.blush{background:var(--blush);border-color:transparent}
+.card.dark{background:linear-gradient(160deg,#4a2b3d,#2f1d28);color:#fff;border:0}
+.stat span{display:block;color:var(--muted);font-size:13px;font-weight:600}.card.dark .stat span,.card.dark .muted{color:rgba(255,255,255,.75)}
+.stat b{font-size:26px;font-weight:700;letter-spacing:-.03em;display:block;margin-top:2px}.stat small{color:var(--muted);font-size:12.5px}
+.pos{color:var(--ok)}.neg{color:var(--red)}
+.kv{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid var(--line)}.kv:last-child{border-bottom:0}.kv span{color:var(--muted)}.kv b{text-align:right;font-weight:600}
+.empty{color:var(--muted);text-align:center;padding:28px 14px;border:1.5px dashed #d9c9c3;border-radius:20px}
+.lab{font-size:12px;font-weight:700;color:var(--rose-d);letter-spacing:.08em;text-transform:uppercase;margin:0 0 8px}
+.sec{display:flex;align-items:center;justify-content:space-between;margin:26px 2px 12px;gap:10px}
+.btn{border:0;border-radius:999px;padding:12px 22px;font-weight:700;font-size:14.5px;cursor:pointer;background:var(--plum);color:#fff;display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.btn.rose{background:var(--rose)}.btn.ghost{background:var(--blush);color:var(--plum)}.btn.line{background:transparent;border:1px solid #d9c9c3;color:var(--ink)}
+.btn.danger{background:var(--red-t);color:var(--red)}.btn.ok{background:var(--ok-t);color:var(--ok)}.btn.sm{padding:8px 15px;font-size:13px}.btn.block{width:100%}
+.actions{display:flex;gap:10px;margin-top:20px}.actions .btn{flex:1}.actions.wrap{flex-wrap:wrap}.actions.wrap .btn{flex:1 1 40%}
+label.f{display:block;font-size:12.5px;font-weight:700;color:var(--muted);margin:13px 0 5px}
+input,select,textarea{width:100%;font:inherit;color:var(--ink);background:#fff;border:1px solid #dfd0ca;border-radius:14px;padding:11px 14px;outline:none}
+input:focus,select:focus,textarea:focus{border-color:var(--rose);box-shadow:0 0 0 3px rgba(183,110,121,.2)}
+.chk{display:flex;align-items:center;gap:10px;font-size:14px;margin:8px 0;cursor:pointer}.chk input{width:18px;height:18px;padding:0;accent-color:var(--rose)}
+.search{display:flex;align-items:center;gap:8px;background:#fff;border:1px solid #dfd0ca;border-radius:999px;padding:0 16px;margin-bottom:16px;color:var(--muted);max-width:520px}.search input{border:0;box-shadow:none!important;padding:12px 0;background:transparent}
+.seg{display:inline-flex;background:#efe4df;border-radius:999px;padding:4px;gap:2px;flex-wrap:wrap}
+.seg button{border:0;background:none;color:var(--muted);font-weight:700;padding:9px 18px;border-radius:999px;cursor:pointer;font-size:14px}.seg button.on{background:var(--plum);color:#fff}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:2px 0 12px;scrollbar-width:none}.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;display:inline-flex;align-items:center;border:1px solid #dfd0ca;background:#fff;color:var(--ink);border-radius:999px;padding:8px 15px;font-size:13.5px;font-weight:600;cursor:pointer}
+.chip.on{background:var(--plum);color:#fff;border-color:var(--plum)}.chip i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:7px}
+.tag{font-size:11.5px;font-weight:700;padding:3px 10px;border-radius:999px;background:var(--blush);color:var(--rose-d);white-space:nowrap}
+.tag.ok{background:var(--ok-t);color:var(--ok)}.tag.warn{background:var(--warn-t);color:var(--warn)}.tag.red{background:var(--red-t);color:var(--red)}.tag.blue{background:var(--blue-t);color:var(--blue)}.tag.gray{background:#efe4df;color:var(--muted)}
+.item{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid var(--line);border-radius:18px;padding:12px 14px;cursor:pointer}.item:hover{border-color:#d3bdb5}
+.av{flex:none;width:42px;height:42px;border-radius:14px;background:var(--blush);color:var(--rose-d);display:grid;place-items:center;font-weight:800;font-size:13px;overflow:hidden}
+.av.lg{width:48px;height:48px;border-radius:50%;font-size:16px}.av img{width:100%;height:100%;object-fit:cover}
+.av.in{background:var(--ok-t);color:var(--ok)}.av.out{background:var(--red-t);color:var(--red)}
+.item .t{font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.item .s{color:var(--muted);font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.item .r{text-align:right;flex:none;display:flex;flex-direction:column;align-items:flex-end;gap:3px;font-weight:700;font-size:14px}
+.menu{display:flex;align-items:center;gap:14px;width:100%;text-align:left;background:#fff;border:1px solid var(--line);border-radius:18px;padding:14px 16px;color:var(--ink);cursor:pointer;font-size:15px}
+.menu .mi{width:42px;height:42px;border-radius:50%;background:var(--blush);color:var(--rose-d);display:grid;place-items:center;flex:none}.menu small{display:block;color:var(--muted);font-size:12.5px}
+.bnav{display:none}
+#toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,20px);background:var(--plum);color:#fff;padding:11px 18px;border-radius:999px;font-weight:600;font-size:14px;opacity:0;pointer-events:none;transition:.2s;z-index:80;max-width:90%;text-align:center}
+#toast.show{opacity:1;transform:translate(-50%,0)}#toast.err{background:var(--red)}
+.sheet-bg{position:fixed;inset:0;background:rgba(30,12,22,.55);display:flex;align-items:flex-end;justify-content:center;z-index:50}
+.sheet{background:#fff;width:100%;max-width:600px;max-height:92vh;overflow:auto;border-radius:28px 28px 0 0;padding:22px 22px calc(24px + env(safe-area-inset-bottom,0px));animation:up .18s ease-out}
+@keyframes up{from{transform:translateY(24px);opacity:0}}
+@media (min-width:700px){.sheet-bg{align-items:center}.sheet{border-radius:28px}}
+.cal-tools{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-bottom:16px}.ctitle{min-width:170px;text-align:center;font-size:17px}
+.cal{background:#fff;border:1px solid var(--line);border-radius:24px;overflow:hidden}
+.cal-h{display:grid;grid-template-columns:repeat(7,1fr);background:var(--blush);font-weight:700;font-size:12.5px;color:var(--rose-d);text-align:center;padding:11px 0}
+.cal-g{display:grid;grid-template-columns:repeat(7,1fr)}
+.cd{min-height:110px;border-top:1px solid var(--line);border-left:1px solid var(--line);padding:7px;cursor:pointer;display:flex;flex-direction:column;gap:4px;min-width:0}.cd:nth-child(7n+1){border-left:0}.cd.off{background:#fbf8f5;color:#b3a5a2}
+.cd .dn{font-weight:700;font-size:13px;width:28px;height:28px;display:grid;place-items:center;border-radius:50%}.cd.today .dn{background:var(--rose);color:#fff}
+.ev{display:block;width:100%;text-align:left;border:0;border-left:3px solid var(--sc);background:var(--sb);color:var(--st);border-radius:7px;padding:3px 7px;font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer}
+.dots{display:none;gap:3px;flex-wrap:wrap}.dot{width:8px;height:8px;border-radius:50%;background:var(--sc);display:inline-block}
+.more{font-size:11.5px;color:var(--muted);font-weight:700}
+.st-agendado{--sc:#4a7fbf;--sb:#e1eaf6;--st:#27508a}.st-confirmado{--sc:#3f8a5a;--sb:#dcefe3;--st:#256040}.st-concluido{--sc:#a3a09b;--sb:#ece8e4;--st:#6b6762}.st-faltou{--sc:#d9485f;--sb:#fbe3e6;--st:#a1283c}.st-cancelado{--sc:#a3a09b;--sb:#ece8e4;--st:#8a8681}
+.legend{display:flex;flex-wrap:wrap;gap:8px 16px;font-size:12.5px;color:var(--muted);margin-top:12px}.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;background:var(--sc)}
+.hb{display:grid;grid-template-columns:120px 1fr auto;gap:8px;align-items:center;margin:9px 0;font-size:13px}.hb span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hb .bar{height:9px;border-radius:5px;background:var(--blush);overflow:hidden}.hb .bar i{display:block;height:100%;background:var(--rose);border-radius:5px}
+.mapwrap{display:grid;grid-template-columns:minmax(200px,260px) 1fr;gap:16px;align-items:start}
+.face{width:100%;height:auto;background:linear-gradient(180deg,#fbf3ef,#f4e5e2);border-radius:20px;cursor:crosshair;display:block}
+.face .l{fill:none;stroke:#a98a85;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}.face g{pointer-events:none}
+.prow{display:grid;grid-template-columns:12px 28px 1fr 74px 28px 32px;gap:8px;align-items:center;padding:6px 0;border-bottom:1px solid var(--line);font-size:13px}
+.prow i{width:12px;height:12px;border-radius:50%}.prow input{padding:6px 8px;border-radius:10px}
+.att-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px}
+.att-card{position:relative;border:1px solid var(--line);border-radius:16px;overflow:hidden;background:#fff;cursor:pointer}
+.att-card .th{aspect-ratio:3/4;background:var(--blush)}.att-card .th img{width:100%;height:100%;object-fit:cover;display:block}
+.att-card .cap{padding:8px 10px}.att-card .cap b{display:block;font-size:12.5px}.att-card .cap small{color:var(--muted);font-size:11px}
+.att-card input{position:absolute;top:8px;right:8px;width:22px;height:22px;padding:0;accent-color:var(--rose)}
+.cmp{position:relative;aspect-ratio:3/4;overflow:hidden;border-radius:16px;background:#000}.cmp img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.cmp .lb{position:absolute;top:10px;padding:3px 10px;border-radius:999px;background:rgba(0,0,0,.55);color:#fff;font-size:12px;font-weight:700;z-index:2}
+.cmp-r{width:100%;margin-top:12px;padding:0;accent-color:var(--rose)}
+.rule{display:grid;grid-template-columns:1fr 80px auto 32px;gap:8px;align-items:center;margin-bottom:8px}.rule label{font-size:12px;white-space:nowrap}
+#printdoc{display:none}
+@media print{body{background:#fff;padding:0}#app,#toast,#modal-root{display:none!important}#printdoc{display:block;padding:24px;font-family:Manrope,Arial,sans-serif;font-size:13px}#printdoc .sign{margin-top:70px;display:flex;gap:40px}#printdoc .sign div{flex:1;border-top:1px solid #000;text-align:center;padding-top:4px;font-size:12px}}
+@media (max-width:1000px){.pills{display:none}}
+@media (max-width:899px){
+ body{padding:0}.frame{border-radius:0;min-height:100vh}
+ .topbar{padding:calc(14px + env(safe-area-inset-top,0px)) 16px 14px}.cta{margin-left:auto;padding:5px 5px 5px 16px}
+ .hero-in{padding:18px 20px 32px}.page{padding:22px 16px calc(112px + env(safe-area-inset-bottom,0px))}
+ .bnav{display:flex;position:fixed;left:10px;right:10px;bottom:calc(10px + env(safe-area-inset-bottom,0px));background:rgba(255,255,255,.97);border:1px solid var(--line);border-radius:24px;box-shadow:0 12px 32px rgba(40,15,30,.22);z-index:20;padding:6px;gap:2px}
+ .bnav button{flex:1;position:relative;background:none;border:0;color:var(--muted);padding:8px 2px 7px;font-size:11px;font-weight:700;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;border-radius:18px}
+ .bnav button.on{background:var(--plum);color:#fff}.bnav .nb{position:absolute;top:2px;right:14px;font-size:10px;padding:0 6px}
+ #toast{bottom:calc(96px + env(safe-area-inset-bottom,0px))}.list{grid-template-columns:1fr}
+ .cd{min-height:60px;padding:4px}.evs{display:none}.dots{display:flex}.mapwrap{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div id="app"></div><div id="modal-root"></div><div id="toast"></div><div id="printdoc"></div>
+<script>
+/* ================= utilidades ================= */
+const $=s=>document.querySelector(s);
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const uid=()=>crypto.randomUUID?crypto.randomUUID():'i'+Date.now().toString(36)+Math.random().toString(36).slice(2,9);
+const iso=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+const today=()=>iso(new Date());
+const addDays=(s,n)=>{const d=new Date(s+'T00:00:00');d.setDate(d.getDate()+n);return iso(d);};
+const addMonths=(s,n)=>{const [y,m,d]=s.split('-').map(Number),dt=new Date(y,m-1+n,1),l=new Date(dt.getFullYear(),dt.getMonth()+1,0).getDate();dt.setDate(Math.min(d,l));return iso(dt);};
+const dd=(a,b)=>Math.round((new Date(a+'T00:00:00')-new Date(b+'T00:00:00'))/864e5);
+const fdate=s=>s?String(s).slice(0,10).split('-').reverse().join('/'):'';
+const money=v=>Number(v||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+const sum=(a,f)=>a.reduce((s,x)=>s+(+(f?f(x):x.value)||0),0);
+const digits=s=>String(s||'').replace(/\D/g,'');
+const initials=n=>String(n||'?').split(/\s+/).filter(Boolean).slice(0,2).map(w=>w[0]).join('').toUpperCase();
+const short=n=>{const w=String(n||'').trim().split(/\s+/);return w.length>1?w[0]+' '+w[w.length-1][0]+'.':(w[0]||'');};
+const rel=d=>{const n=dd(d,today());return n<0?`há ${-n} dia${n<-1?'s':''}`:n===0?'hoje':n===1?'amanhã':`em ${n} dias`;};
+const waLink=(ph,t)=>{let d=digits(ph);if(d&&d.length<=11)d='55'+d;return 'https://wa.me/'+d+(t?'?text='+encodeURIComponent(t):'');};
+const fill=(t,o)=>String(t).replace(/\{(\w+)\}/g,(_,k)=>o[k]==null?'':o[k]);
+const MONTHS=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+const DOW=['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+const WD=['domingo','segunda-feira','terça-feira','quarta-feira','quinta-feira','sexta-feira','sábado'];
+const mlabel=m=>MONTHS[+m.slice(5,7)-1]+' de '+m.slice(0,4);
+const shiftMonth=(m,n)=>iso(new Date(+m.slice(0,4),+m.slice(5,7)-1+n,1)).slice(0,7);
+const val=id=>{const e=document.getElementById('f_'+id);return e?e.value:'';};
+const num=id=>parseFloat(String(val(id)).replace(',','.'))||0;
+const opts=(l,sel)=>l.map(o=>{const [v,t]=Array.isArray(o)?o:[o,o];return `<option value="${esc(v)}" ${v===sel?'selected':''}>${esc(t)}</option>`;}).join('');
+const empty=m=>`<div class="empty">${m}</div>`;
+const lst=h=>`<div class="list">${h}</div>`;
+const IC={home:'<path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v10h13V10"/>',users:'<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6"/><path d="M16 4.6a3.5 3.5 0 0 1 0 6.8M18 14.6c2 .6 3.5 2.4 3.5 5.4"/>',calendar:'<rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/>',bell:'<path d="M6 17V11a6 6 0 0 1 12 0v6l1.5 2h-15z"/><path d="M10 21h4"/>',dots:'<circle cx="5" cy="12" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="19" cy="12" r="1.7"/>',plus:'<path d="M12 5v14M5 12h14"/>',back:'<path d="M15 5l-7 7 7 7"/>',chev:'<path d="M9 5l7 7-7 7"/>',chevd:'<path d="M6 9l6 6 6-6"/>',arrow:'<path d="M7 17 17 7M8 7h9v9"/>',search:'<circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4-4"/>',trash:'<path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/>',edit:'<path d="M4 20h4L19 9l-4-4L4 16z"/>',box:'<path d="M3 8l9-5 9 5v8l-9 5-9-5z"/><path d="M3 8l9 5 9-5M12 13v8"/>',wallet:'<rect x="2.5" y="6" width="19" height="13" rx="3"/><path d="M2.5 10h19"/><circle cx="17" cy="14.5" r="1.2"/>',chart:'<path d="M4 20V4M4 20h16M8 16v-5M12 16V8M16 16v-3"/>',camera:'<path d="M4 8h3l1.6-2.5h6.8L17 8h3a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13.5" r="3.6"/>',send:'<path d="M12 15V3M8 7l4-4 4 4M5 14v6h14v-6"/>',save:'<path d="M12 3v12M8 11l4 4 4-4M5 20h14"/>',gear:'<circle cx="12" cy="12" r="3"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M18.7 5.3l-2.1 2.1M7.4 16.6l-2.1 2.1"/>',x:'<path d="M6 6l12 12M18 6L6 18"/>',spark:'<path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8zM19 16l.8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8z"/>',file:'<path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4M9 12h6M9 16h6"/>',repeat:'<path d="M4 11V9a3 3 0 0 1 3-3h11l-3-3M20 13v2a3 3 0 0 1-3 3H6l3 3"/>'};
+const ic=(n,s=20)=>`<svg viewBox="0 0 24 24" width="${s}" height="${s}" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${IC[n]||''}</svg>`;
+let tt;function toast(m,err){const t=$('#toast');t.textContent=m;t.className='show'+(err?' err':'');clearTimeout(tt);tt=setTimeout(()=>{t.className='';},3000);}
+function modal(h){$('#modal-root').innerHTML=`<div class="sheet-bg" onclick="if(event.target===this)closeModal()"><div class="sheet" role="dialog" aria-modal="true">${h}</div></div>`;hydrate();}
+function closeModal(){$('#modal-root').innerHTML='';}
+function download(name,text,type){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([text],{type}));a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1500);}
+function printDoc(h){$('#printdoc').innerHTML=h;window.print();}
+
+/* ================= imagens (IndexedDB) ================= */
+const idb=()=>new Promise((res,rej)=>{const r=indexedDB.open('harmo_img',1);r.onupgradeneeded=()=>r.result.createObjectStore('i');r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error);});
+async function imgPut(id,b){const d=await idb();return new Promise((res,rej)=>{const t=d.transaction('i','readwrite');t.objectStore('i').put(b,id);t.oncomplete=res;t.onerror=()=>rej(t.error);});}
+async function imgGet(id){const d=await idb();return new Promise((res,rej)=>{const q=d.transaction('i').objectStore('i').get(id);q.onsuccess=()=>res(q.result);q.onerror=()=>rej(q.error);});}
+async function imgDel(id){if(!id)return;try{const d=await idb();d.transaction('i','readwrite').objectStore('i').delete(id);delete URLS[id];}catch(e){}}
+const URLS={};
+async function imgUrl(id){if(URLS[id])return URLS[id];const b=await imgGet(id);return b?(URLS[id]=URL.createObjectURL(b)):'';}
+function hydrate(){document.querySelectorAll('img[data-img]:not([src])').forEach(async el=>{try{const u=await imgUrl(el.dataset.img);if(u)el.src=u;}catch(e){}});}
+function compress(file,max,q){return new Promise((res,rej)=>{const fr=new FileReader();fr.onerror=()=>rej(new Error('Falha ao ler o arquivo'));fr.onload=()=>{const im=new Image();im.onerror=()=>rej(new Error('Imagem inválida'));im.onload=()=>{const k=Math.min(1,max/Math.max(im.width,im.height)),cv=document.createElement('canvas');cv.width=Math.round(im.width*k);cv.height=Math.round(im.height*k);cv.getContext('2d').drawImage(im,0,0,cv.width,cv.height);cv.toBlob(b=>b?res(b):rej(new Error('Falha ao processar')),'image/jpeg',q);};im.src=fr.result;};fr.readAsDataURL(file);});}
+
+/* ================= protocolos padrão (editáveis no app) ================= */
+const POS_ALARME='Procure atendimento imediatamente se houver dor intensa, pele esbranquiçada ou com manchas arroxeadas, alteração da visão, febre ou piora rápida do inchaço.';
+const DEF_PROT=[
+ {key:'toxina',name:'Toxina botulínica',unit:'U',price:1200,rules:[{label:'Avaliação / retoque',days:15,nova:false},{label:'Reaplicação',days:120,nova:true}],pos:'Não deite e evite esforço físico intenso por 4 horas. Não massageie a região por 24 horas. O efeito aparece em 3 a 7 dias e o pico costuma ocorrer em cerca de 15 dias.'},
+ {key:'preenchimento',name:'Preenchimento com ácido hialurônico',unit:'mL',price:1800,rules:[{label:'Avaliação',days:30,nova:false},{label:'Manutenção',days:270,nova:true}],pos:'Evite massagear a área, calor intenso (sauna, sol) e exercício intenso por 48 horas. Inchaço e pequenos hematomas leves podem ocorrer nos primeiros dias.'},
+ {key:'bioestimulador',name:'Bioestimulador de colágeno',unit:'mL',price:2500,rules:[{label:'Próxima sessão',days:45,nova:true},{label:'Manutenção anual',days:365,nova:true}],pos:'Siga a massagem orientada pelo profissional, se indicada. Evite calor intenso e exercício intenso por 48 horas. O resultado é gradual, ao longo de semanas.'},
+ {key:'skinbooster',name:'Skinbooster',unit:'mL',price:900,rules:[{label:'Próxima sessão',days:30,nova:true},{label:'Manutenção',days:180,nova:true}],pos:'Pequenas pápulas e vermelhidão duram algumas horas ou dias. Evite maquiagem por 12 horas, use protetor solar e hidrate bem a pele.'},
+ {key:'fios',name:'Fios de PDO',unit:'un',price:1500,rules:[{label:'Avaliação',days:30,nova:false},{label:'Manutenção',days:180,nova:true}],pos:'Evite movimentos faciais exagerados, massagens e dormir de bruços por cerca de 2 semanas, ou conforme a orientação do profissional.'},
+ {key:'peeling',name:'Peeling químico',unit:'sessão',price:350,rules:[{label:'Próxima sessão',days:21,nova:true}],pos:'Não remova a descamação manualmente. Use protetor solar rigorosamente e hidratante conforme a orientação.'},
+ {key:'microagulhamento',name:'Microagulhamento',unit:'sessão',price:450,rules:[{label:'Próxima sessão',days:30,nova:true}],pos:'Evite sol, maquiagem e exercícios por 24 horas. Use protetor solar e os cosméticos prescritos.'},
+ {key:'enzimas',name:'Enzimas / papada',unit:'mL',price:700,rules:[{label:'Próxima sessão',days:30,nova:true}],pos:'Inchaço local é esperado por alguns dias. Evite calor intenso e siga a orientação de compressas do profissional.'},
+ {key:'outro',name:'Outro procedimento',unit:'un',price:0,rules:[],pos:''}];
+const DEF_TPL={
+ retorno:'Olá, {nome}! Aqui é da {clinica}. Está chegando a hora do seu retorno ({retorno}) do procedimento de {procedimento}. Vamos agendar um horário?',
+ pos:'Olá, {nome}! Tudo bem após o procedimento de {procedimento}? Seguem as orientações:\n\n{orientacoes}',
+ reativ:'Olá, {nome}! Aqui é da {clinica}. Faz um tempinho desde o seu último atendimento. Quer agendar uma avaliação para revisarmos seus resultados?',
+ lembrete:'Olá, {nome}! Confirmando sua consulta em {data} às {hora} na {clinica}. Podemos confirmar?'};
+const AN=[['gestante','Gestante / lactante'],['alergia','Alergias relevantes'],['anticoag','Anticoagulante / AAS'],['queloide','Tendência a queloide'],['herpes','Herpes labial recorrente'],['autoimune','Doença autoimune'],['isotret','Isotretinoína recente'],['infec','Infecção ativa na região']];
+const PT={toxina:['Toxina','#b76e79'],preench:['Preenchedor','#2f6fb5'],bio:['Bioestimulador','#d99a2b'],fios:['Fios','#3a8a5c'],skin:['Skinbooster','#8a5cc0'],outro:['Outro','#64748b']};
+const PU={toxina:'U',preench:'mL',bio:'mL',fios:'un',skin:'mL',outro:''};
+const PQ={toxina:2,preench:.1,bio:.2,fios:1,skin:.1,outro:1};
+const P2T={toxina:'toxina',preenchimento:'preench',bioestimulador:'bio',fios:'fios',skinbooster:'skin'};
+const RST={pendente:['Pendente','warn'],contatado:['Contatado','blue'],agendado:['Agendado','ok'],concluido:['Concluído','gray'],descartado:['Descartado','gray']};
+const AST={agendado:['Agendado','blue'],confirmado:['Confirmado','ok'],concluido:['Concluído','gray'],faltou:['Faltou','red'],cancelado:['Cancelado','gray']};
+const CAT_IN=['Toxina botulínica','Preenchimento','Bioestimulador','Skinbooster','Fios','Outros'],CAT_OUT=['Produtos / insumos','Aluguel','Salários','Impostos','Marketing','Equipamentos','Contas','Outros'];
+const METHODS=['Pix','Dinheiro','Cartão de crédito','Cartão de débito','Boleto','Transferência'];
+
+/* ================= dados ================= */
+const LS='harmonizacao_v1';
+let S={patients:[],sessions:[],retornos:[],stock:[],appts:[],tx:[],protocols:[],photos:[],cfg:{}};
+function loadLocal(){try{const d=JSON.parse(localStorage.getItem(LS));if(d)S={...S,...d};}catch(e){}if(!S.protocols.length)S.protocols=JSON.parse(JSON.stringify(DEF_PROT));}
+function persist(){try{localStorage.setItem(LS,JSON.stringify(S));}catch(e){toast('Armazenamento cheio. Exporte um backup.',true);}}
+function up(kind,o){const a=S[kind],i=a.findIndex(x=>x.id===o.id);if(i<0){o.created_at=o.created_at||new Date().toISOString();a.push(o);}else a[i]={...a[i],...o};persist();return S[kind].find(x=>x.id===o.id);}
+function rm(kind,id){S[kind]=S[kind].filter(x=>x.id!==id);persist();}
+const pat=id=>S.patients.find(x=>x.id===id);
+const pname=id=>(pat(id)||{}).name||'—';
+const protOf=k=>S.protocols.find(p=>p.key===k)||S.protocols[S.protocols.length-1]||{key:'outro',name:'Procedimento',unit:'un',rules:[]};
+const protName=k=>protOf(k).name;
+const CL=()=>S.cfg.clinic||{};
+const tpl=k=>(S.cfg.tpl&&S.cfg.tpl[k])||DEF_TPL[k];
+const clinicName=()=>CL().name||'nossa clínica';
+const riskList=p=>AN.filter(([k])=>p.an&&p.an[k]).map(x=>x[1]);
+const OPEN=['pendente','contatado','agendado'];
+const rOpen=()=>S.retornos.filter(r=>OPEN.includes(r.status));
+const rAlert=()=>rOpen().filter(r=>r.status!=='agendado'&&r.due<=today());
+const sAlerts=()=>S.stock.map(s=>{const d=s.validade?dd(s.validade,today()):null,f=[];if(d!=null&&d<0)f.push('Vencido');else if(d!=null&&d<=60)f.push('Vence em '+d+' dias');if(+s.min>0&&+s.qty<=+s.min)f.push('Estoque baixo');return {s,f};}).filter(x=>x.f.length);
+const apptsOn=d=>S.appts.filter(a=>a.date===d).sort((a,b)=>String(a.time).localeCompare(String(b.time)));
+function genRetornos(ses){
+  S.retornos.filter(r=>r.patient_id===ses.patient_id&&r.proc===ses.proc&&OPEN.includes(r.status)&&r.nova&&r.session_id!==ses.id).forEach(r=>up('retornos',{id:r.id,status:'concluido',done_at:today()}));
+  return (protOf(ses.proc).rules||[]).map(r=>up('retornos',{id:uid(),patient_id:ses.patient_id,session_id:ses.id,proc:ses.proc,label:r.label,nova:!!r.nova,due:addDays(ses.date,+r.days),status:'pendente'}));
+}
+async function delPatientData(id){
+  const p=pat(id);if(p&&p.avatar)imgDel(p.avatar);
+  S.photos.filter(x=>x.patient_id===id).forEach(x=>imgDel(x.id));
+  S.photos=S.photos.filter(x=>x.patient_id!==id);S.sessions=S.sessions.filter(x=>x.patient_id!==id);S.retornos=S.retornos.filter(x=>x.patient_id!==id);S.appts=S.appts.filter(x=>x.patient_id!==id);
+  S.tx.forEach(x=>{if(x.patient_id===id)x.patient_id=null;});S.patients=S.patients.filter(x=>x.id!==id);persist();
+}
+
+/* ================= notificações ================= */
+function checkNotify(force){
+  if(!('Notification' in window)||Notification.permission!=='granted')return;
+  const t=today();if(!force&&S.cfg.lastNotify===t)return;
+  const a=rAlert(),s=sAlerts();if(!a.length&&!s.length)return;
+  const body=[a.length?a.length+' retorno(s) para contatar':'',s.length?s.length+' alerta(s) de estoque':''].filter(Boolean).join(' · ');
+  try{new Notification('Harmonização Gestor',{body,tag:'harmo-'+t});}catch(e){}
+  S.cfg.lastNotify=t;persist();
+}
+async function askNotif(){
+  if(!('Notification' in window))return toast('Este navegador não suporta notificações.',true);
+  const r=await Notification.requestPermission();
+  toast(r==='granted'?'Notificações ativadas.':'Permissão não concedida.',r!=='granted');
+  if(r==='granted')checkNotify(true);render();
+}
+
+/* ================= estado de tela ================= */
+const V={screen:'home',pid:null,ptab:'dados',q:'',month:today().slice(0,7),ftype:'todas',adate:today(),rfilter:'alerta',rtab:'abertos',period:6,ses:null,ptool:'toxina',sel:[],pkind:'antes',av:null,bfrom:'list'};
+function nav(s,o){Object.assign(V,o||{});V.screen=s;render();window.scrollTo(0,0);}
+document.addEventListener('click',()=>document.querySelectorAll('.dd.open').forEach(d=>d.classList.remove('open')));
+function toggleDd(e){e.stopPropagation();e.currentTarget.parentElement.classList.toggle('open');}
+const avIn=p=>p&&p.avatar?`<img data-img="${p.avatar}" alt="">`:esc(initials(p&&p.name));
+function item(o){return `<div class="item" ${o.click?`onclick="${o.click}" role="button" tabindex="0"`:''}><div class="av ${o.cls||''}">${o.av}</div><div class="sp"><div class="t">${o.t}</div><div class="s">${o.s||''}</div></div><div class="r">${o.r||''}</div></div>`;}
+const head=(title,back,right)=>`<div class="head">${back?`<button class="icon" onclick="${back}" aria-label="Voltar">${ic('back',22)}</button>`:''}<h1 class="sp">${title}</h1>${right||''}</div>`;
+
+/* ================= estrutura ================= */
+function render(){
+  const map={home:scrHome,patients:scrPatients,patient:scrPatient,session:scrSession,agenda:scrAgenda,ret:scrRet,stock:scrStock,fin:scrFin,reports:scrReports,prot:scrProt,more:scrMore};
+  const body=(map[V.screen]||scrHome)();
+  const topOn={patient:'patients',session:'patients'}[V.screen]||V.screen;
+  const botOn={home:'home',patients:'patients',patient:'patients',session:'patients',agenda:'agenda',ret:'ret'}[V.screen]||'more';
+  const nA=rAlert().length;
+  const badge=nA?`<span class="nb">${nA}</span>`:'';
+  const top=[['home','Início'],['patients','Pacientes'],['agenda','Agenda'],['ret','Retornos'+(nA?' '+badge:'')],['stock','Estoque'],['fin','Financeiro']];
+  const ban=nA&&V.screen!=='ret'?`<button class="banner" onclick="nav('ret',{rtab:'abertos',rfilter:'alerta'})">${nA} retorno${nA>1?'s':''} para contatar (vencidos ou de hoje). Toque para ver.</button>`:'';
+  const hero=V.screen==='home';
+  $('#app').innerHTML=`<div class="frame"><header class="band"><div class="topbar"><div class="brand" onclick="nav('home')">${ic('spark',30)}<div><b>Harmonização</b><small>${esc(CL().name||'Gestão clínica')}</small></div></div>
+  <nav class="pills">${top.map(([k,l])=>`<button class="${topOn===k?'on':''}" onclick="nav('${k}')">${l}</button>`).join('')}
+  <div class="dd"><button onclick="toggleDd(event)">Gestão ${ic('chevd',14)}</button><div class="pop"><button onclick="nav('reports')">Relatórios</button><button onclick="nav('prot')">Protocolos e retornos</button><button onclick="clinicForm()">Clínica e mensagens</button><button onclick="nav('more')">Backup e notificações</button></div></div></nav>
+  <button class="cta" onclick="apptForm()">Agendar <span class="ar">${ic('arrow',16)}</span></button></div>
+  ${hero?`<div class="hero-in"><p class="eyebrow">Pacientes · Sessões · Retornos</p><h1>Cada retorno no tempo certo.</h1><p class="sub">Mapa facial, rastreabilidade de lotes, fotos de antes e depois e avisos automáticos de retorno, tudo em um só lugar.</p><button class="btn rose" onclick="newSession()">${ic('plus',16)} Nova sessão</button></div>`:''}</header>
+  <main class="page">${ban}${body}</main></div>
+  <nav class="bnav">${[['home','Início','home'],['patients','Pacientes','users'],['agenda','Agenda','calendar'],['ret','Retornos','bell'],['more','Mais','dots']].map(([k,l,i])=>`<button class="${botOn===k?'on':''}" onclick="nav('${k}')">${ic(i,22)}${l}${k==='ret'&&nA?`<span class="nb">${nA}</span>`:''}</button>`).join('')}</nav>`;
+  document.title=(nA?`(${nA}) `:'')+'Harmonização Gestor';hydrate();
+}
+
+/* ================= início ================= */
+function scrHome(){
+  const t=today(),m=t.slice(0,7),dt=new Date(),h=dt.getHours();
+  const hoje=apptsOn(t),al=rAlert().sort((a,b)=>a.due.localeCompare(b.due));
+  const inM=S.tx.filter(x=>(x.date||'').slice(0,7)===m);
+  const fat=sum(inM.filter(x=>x.type==='entrada'&&x.status==='pago')),desp=sum(inM.filter(x=>x.type==='despesa'&&x.status==='pago'));
+  const rec=S.tx.filter(x=>x.type==='entrada'&&x.status==='pendente'),sa=sAlerts();
+  const bd=S.patients.filter(p=>p.birth&&p.birth.slice(5,7)===m.slice(5,7)).sort((a,b)=>a.birth.slice(8)-b.birth.slice(8));
+  const prox7=rOpen().filter(r=>r.status!=='agendado'&&r.due>t&&r.due<=addDays(t,7)).length;
+  return `<p class="lab">${h<12?'Bom dia':h<18?'Boa tarde':'Boa noite'} · ${WD[dt.getDay()]}, ${dt.getDate()} de ${MONTHS[dt.getMonth()].toLowerCase()}</p>
+  <div class="grid4">
+   <div class="card dark stat"><span>Consultas hoje</span><b>${hoje.length}</b><small class="muted">${hoje.length?'Próxima: '+esc(hoje[0].time||''):'Agenda livre'}</small></div>
+   <div class="card blush stat"><span>Retornos para contatar</span><b>${al.length}</b><small>${prox7} nos próximos 7 dias</small></div>
+   <div class="card stat"><span>Recebido no mês</span><b class="pos">${money(fat)}</b><small>Despesas ${money(desp)} · A receber ${money(sum(rec))}</small></div>
+   <div class="card stat"><span>Alertas de estoque</span><b class="${sa.length?'neg':''}">${sa.length}</b><small>${sa.length?'Validade ou estoque mínimo':'Tudo em dia'}</small></div></div>
+  <div class="cols">
+   <div class="card"><div class="row mb"><h3 class="sp">Agenda de hoje</h3><button class="btn ghost sm" onclick="nav('agenda')">Abrir agenda</button></div>${hoje.length?lst(hoje.map(apptRow).join('')):empty('Nenhuma consulta hoje.')}</div>
+   <div class="card"><div class="row mb"><h3 class="sp">Retornos para contatar</h3><button class="btn ghost sm" onclick="nav('ret')">Ver todos</button></div>${al.length?lst(al.slice(0,5).map(retRow).join('')):empty('Nenhum retorno pendente hoje.')}</div>
+   ${sa.length?`<div class="card"><div class="row mb"><h3 class="sp">Estoque e validade</h3><button class="btn ghost sm" onclick="nav('stock')">Abrir</button></div>${lst(sa.slice(0,4).map(x=>item({av:ic('box',18),t:esc(x.s.name),s:'Lote '+esc(x.s.lote||'—')+' · '+x.s.qty+' '+esc(x.s.unit||''),r:x.f.map(f=>`<span class="tag red">${f}</span>`).join(''),click:`stockForm('${x.s.id}')`})).join(''))}</div>`:''}
+   ${bd.length?`<div class="card"><h3 class="mb">Aniversariantes de ${MONTHS[+m.slice(5,7)-1].toLowerCase()}</h3>${lst(bd.slice(0,5).map(p=>item({av:p.birth.slice(8,10),t:esc(p.name),s:esc(p.phone||''),click:`openPatient('${p.id}')`})).join(''))}</div>`:''}
+  </div>`;
+}
+
+/* ================= pacientes ================= */
+function scrPatients(){return head('Pacientes',null,`<button class="btn" onclick="patientForm()">${ic('plus',16)} Novo paciente</button>`)+`<div class="search">${ic('search',18)}<input placeholder="Buscar por nome ou telefone" value="${esc(V.q)}" oninput="V.q=this.value;$('#plist').innerHTML=patientList()"></div><div id="plist" class="list">${patientList()}</div>`;}
+function patientList(){
+  const q=V.q.trim().toLowerCase(),qd=digits(q);
+  const l=S.patients.filter(p=>!q||p.name.toLowerCase().includes(q)||(qd&&digits(p.phone).includes(qd))).sort((a,b)=>a.name.localeCompare(b.name,'pt-BR'));
+  if(!l.length)return empty(S.patients.length?'Nenhum paciente encontrado.':'Nenhum paciente ainda. Toque em “Novo paciente”.');
+  return l.map(p=>{const n=rOpen().filter(r=>r.patient_id===p.id).length,rk=riskList(p).length;return item({av:avIn(p),t:esc(p.name),s:esc(p.phone||'Sem telefone'),r:(rk?`<span class="tag red">Alerta</span>`:'')+(n?`<span class="tag">${n} retorno${n>1?'s':''}</span>`:''),click:`openPatient('${p.id}')`});}).join('');
+}
+function openPatient(id){nav('patient',{pid:id,ptab:'dados',sel:[]});}
+function patientForm(id){
+  const p=pat(id)||{an:{}},pid=id||uid();V.av=null;
+  modal(`<h2>${id?'Editar paciente':'Novo paciente'}</h2><input type="hidden" id="f_pid" value="${pid}">
+  <div class="row mt"><div class="av lg" id="avprev" style="cursor:pointer" onclick="$('#avfile').click()">${avIn(p)}</div><div class="muted" style="font-size:13px">Toque no círculo para escolher a foto do paciente.</div></div>
+  <input id="avfile" type="file" accept="image/*" hidden onchange="onAvatar(this)">
+  <label class="f">Nome completo</label><input id="f_name" value="${esc(p.name)}" autocomplete="off">
+  <div class="grid2"><div><label class="f">Telefone / WhatsApp</label><input id="f_phone" inputmode="tel" value="${esc(p.phone)}"></div><div><label class="f">Nascimento</label><input id="f_birth" type="date" value="${esc(p.birth)}"></div></div>
+  <div class="grid2"><div><label class="f">E-mail</label><input id="f_email" type="email" value="${esc(p.email)}"></div><div><label class="f">Como conheceu a clínica</label><input id="f_origem" value="${esc(p.origem)}"></div></div>
+  <label class="f">Anamnese: marque o que se aplica</label>${AN.map(([k,l])=>`<label class="chk"><input type="checkbox" id="an_${k}" ${p.an&&p.an[k]?'checked':''}> ${l}</label>`).join('')}
+  <label class="f">Alergias, medicamentos e observações</label><textarea id="f_notes" rows="3">${esc(p.notes)}</textarea>
+  <label class="chk"><input type="checkbox" id="f_termo" ${p.termo?'checked':''}> Termo de consentimento assinado</label>
+  <label class="chk"><input type="checkbox" id="f_img" ${p.img?'checked':''}> Autoriza uso de imagem (fotos de antes e depois)</label>
+  <div class="actions"><button class="btn line" onclick="closeModal()">Cancelar</button><button class="btn" onclick="savePatient('${id||''}','${pid}')">Salvar paciente</button></div>`);
+}
+async function onAvatar(inp){const f=inp.files[0];if(!f)return;try{V.av=await compress(f,480,.82);$('#avprev').innerHTML=`<img src="${URL.createObjectURL(V.av)}" alt="">`;}catch(e){toast(e.message,true);}}
+async function savePatient(id,pid){
+  const name=val('name').trim();if(!name)return toast('Informe o nome.',true);
+  const old=pat(id)||{},an={};AN.forEach(([k])=>{an[k]=$('#an_'+k).checked;});
+  let avatar=old.avatar||null;
+  if(V.av){const nid=uid();await imgPut(nid,V.av);if(avatar)imgDel(avatar);avatar=nid;V.av=null;}
+  const r=up('patients',{...old,id:pid,name,phone:val('phone'),birth:val('birth'),email:val('email'),origem:val('origem'),notes:val('notes'),an,termo:$('#f_termo').checked,img:$('#f_img').checked,avatar});
+  closeModal();toast('Paciente salvo.');if(id)render();else openPatient(r.id);
+}
+function scrPatient(){
+  const p=pat(V.pid);if(!p){V.screen='patients';return scrPatients();}
+  const tabs=[['dados','Dados'],['sessoes','Sessões'],['fotos','Fotos'],['ret','Retornos']],rk=riskList(p);
+  const body={dados:tabDados,sessoes:tabSessoes,fotos:tabFotos,ret:tabRetP}[V.ptab](p);
+  return `<div class="head"><button class="icon" onclick="nav('patients')" aria-label="Voltar">${ic('back',22)}</button><div class="av lg">${avIn(p)}</div><div class="sp"><h1 class="sm">${esc(p.name)}</h1><div class="muted">${esc(p.phone||'Sem telefone')}</div></div><button class="icon" onclick="patientForm('${p.id}')" aria-label="Editar">${ic('edit',20)}</button></div>
+  ${rk.length?`<div class="banner red">Alertas de anamnese: ${esc(rk.join(' · '))}</div>`:''}
+  <div class="chips">${tabs.map(([k,l])=>`<button class="chip ${V.ptab===k?'on':''}" onclick="V.ptab='${k}';render()">${l}</button>`).join('')}</div>${body}`;
+}
+function tabDados(p){
+  const age=p.birth?Math.floor((Date.now()-new Date(p.birth+'T00:00:00'))/31557600000):null;
+  const next=S.appts.filter(a=>a.patient_id===p.id&&a.date>=today()&&a.status!=='cancelado').sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time)).slice(0,3);
+  return `<div class="cols" style="margin-top:0"><div class="card">
+   <div class="kv"><span>Telefone</span><b>${p.phone?`<a href="${waLink(p.phone)}" target="_blank" rel="noopener">${esc(p.phone)} · WhatsApp</a>`:'—'}</b></div>
+   <div class="kv"><span>Nascimento</span><b>${p.birth?fdate(p.birth)+(age!=null?' ('+age+' anos)':''):'—'}</b></div>
+   <div class="kv"><span>E-mail</span><b>${esc(p.email||'—')}</b></div><div class="kv"><span>Origem</span><b>${esc(p.origem||'—')}</b></div>
+   <div class="kv"><span>Termo de consentimento</span><b><span class="tag ${p.termo?'ok':'warn'}">${p.termo?'Assinado':'Pendente'}</span></b></div>
+   <div class="kv"><span>Uso de imagem</span><b><span class="tag ${p.img?'ok':'warn'}">${p.img?'Autorizado':'Não autorizado'}</span></b></div></div>
+  <div class="card"><h3>Observações e anamnese</h3><p class="pre">${esc(p.notes||'Nada registrado.')}</p></div></div>
+  <div class="sec"><h3>Próximas consultas</h3></div>${next.length?lst(next.map(apptRow).join('')):empty('Sem consultas futuras.')}
+  <div class="row mt" style="flex-wrap:wrap"><button class="btn rose" onclick="newSession('${p.id}')">Nova sessão</button><button class="btn ghost" onclick="apptForm('','${p.id}')">Agendar</button><button class="btn line" onclick="printTermo('${p.id}')">Imprimir termo</button><button class="btn danger" onclick="delPatient('${p.id}')">Excluir paciente</button></div>`;
+}
+async function delPatient(id){if(!confirm('Excluir o paciente e todo o histórico (sessões, retornos, fotos e consultas)?'))return;await delPatientData(id);nav('patients');toast('Paciente excluído.');}
+function printTermo(pid){
+  const p=pat(pid),c=CL();
+  printDoc(`<h1 style="font-size:22px">${esc(c.name||'Clínica')}</h1><p>${esc([c.prof,c.reg,c.phone].filter(Boolean).join(' · '))}</p>
+  <h2 style="margin-top:18px">Termo de consentimento livre e esclarecido</h2><p>Paciente: <b>${esc(p.name)}</b> · Data: ${fdate(today())}</p>
+  <p>Declaro que recebi explicações claras sobre o procedimento estético proposto, seus objetivos, resultados esperados e limitações, alternativas, cuidados pré e pós-procedimento e possíveis riscos e intercorrências, incluindo edema, hematomas, assimetrias, reações alérgicas e outras complicações descritas pelo profissional. Informei corretamente meu histórico de saúde, alergias e medicamentos em uso, e tive a oportunidade de esclarecer minhas dúvidas.</p>
+  <p>Autorizo o registro fotográfico para acompanhamento do tratamento: (&nbsp;&nbsp;) sim &nbsp;&nbsp; (&nbsp;&nbsp;) não. Autorizo o uso das imagens em divulgação: (&nbsp;&nbsp;) sim &nbsp;&nbsp; (&nbsp;&nbsp;) não.</p>
+  <p>Estou ciente de que o resultado varia de pessoa para pessoa e de que não há garantia de resultado.</p>
+  <div class="sign"><div>${esc(p.name)}</div><div>${esc(c.prof||'Profissional responsável')}${c.reg?' · '+esc(c.reg):''}</div></div>`);
+}
+
+/* ---------- sessões ---------- */
+function tabSessoes(p){
+  const l=S.sessions.filter(s=>s.patient_id===p.id).sort((a,b)=>b.date.localeCompare(a.date));
+  return `<button class="btn rose mb" onclick="newSession('${p.id}')">${ic('plus',16)} Nova sessão</button>`+(l.length?lst(l.map(s=>item({av:ic('spark',18),t:esc(protName(s.proc)),s:fdate(s.date)+(s.product?' · '+esc(s.product):'')+(s.lote?' · lote '+esc(s.lote):''),r:s.value?money(s.value):'',click:`openSession('${s.id}')`})).join('')):empty('Nenhuma sessão registrada.'));
+}
+function newSession(pid){
+  if(!S.patients.length)return toast('Cadastre um paciente primeiro.',true);
+  const k=S.protocols[0].key;
+  V.ses={id:uid(),isNew:true,patient_id:pid||'',date:today(),proc:k,stock_id:'',product:'',lote:'',validade:'',qty:'',points:[],regions:'',value:S.protocols[0].price||'',pay:'pago',method:'Pix',notes:'',pos:S.protocols[0].pos||''};
+  V.ptool=P2T[k]||'outro';V.from=pid?'patient':'list';if(pid)V.pid=pid;nav('session');
+}
+function openSession(id){const s=S.sessions.find(x=>x.id===id);V.ses=JSON.parse(JSON.stringify(s));V.ses.qtyMan=true;V.ses.points=V.ses.points||[];V.pid=s.patient_id;V.from='patient';V.ptool=P2T[s.proc]||'outro';nav('session');}
+function backSes(){V.ses=null;if(V.pid&&pat(V.pid)&&V.from==='patient')nav('patient',{pid:V.pid,ptab:'sessoes'});else nav('patients');}
+function setProc(k){const pr=protOf(k);V.ses.proc=k;V.ses.pos=pr.pos||'';if(V.ses.isNew&&pr.price)V.ses.value=pr.price;V.ptool=P2T[k]||'outro';render();}
+function pickStock(id){const s=S.stock.find(x=>x.id===id);V.ses.stock_id=id;if(s){V.ses.product=s.name;V.ses.lote=s.lote||'';V.ses.validade=s.validade||'';}render();}
+function ptSum(){const g={};V.ses.points.forEach(p=>{g[p.t]=(g[p.t]||0)+(+p.q||0);});const e=Object.entries(g);return e.length?e.map(([t,q])=>`${PT[t][0]}: ${(+q.toFixed(2)).toString().replace('.',',')} ${PU[t]}`).join(' · '):'Nenhum ponto marcado.';}
+function ptList(){return V.ses.points.map((p,i)=>`<div class="prow"><i style="background:${PT[p.t][1]}"></i><b>#${i+1}</b><span>${PT[p.t][0]}</span><input type="number" step="0.05" min="0" inputmode="decimal" value="${p.q}" oninput="setPtQ(${i},this.value)"><small>${PU[p.t]}</small><button class="icon sm" onclick="rmPt(${i})" aria-label="Remover ponto">${ic('x',14)}</button></div>`).join('')+`<p class="hint" id="psum">${ptSum()}</p>`;}
+function faceSvg(pts,act){
+  const dots=pts.map((p,i)=>`<g><circle cx="${p.x}" cy="${p.y}" r="7.5" fill="${PT[p.t][1]}" stroke="#fff" stroke-width="1.6"/><text x="${p.x}" y="${p.y+3}" text-anchor="middle" font-size="8" font-weight="800" fill="#fff">${i+1}</text></g>`).join('');
+  return `<svg viewBox="0 0 200 260" class="face" ${act?'onclick="facePt(event)"':''} role="img" aria-label="Mapa facial esquemático"><path class="l" d="M100 12C58 12 36 46 36 100c0 40 8 70 26 96 14 20 28 32 38 32s24-12 38-32c18-26 26-56 26-96 0-54-22-88-64-88z"/><path class="l" d="M38 100c-10-2-12 18-4 28 3 4 6 4 8 2M162 100c10-2 12 18 4 28-3 4-6 4-8 2"/><path class="l" d="M60 98q14-9 28 0q-14 7-28 0zM112 98q14-9 28 0q-14 7-28 0zM56 84q18-10 36-4M108 80q18-6 36 4"/><path class="l" d="M100 104v36m-10 8q10 7 20 0"/><path class="l" d="M80 172q10-6 20-2q10-4 20 2q-10 12-20 12q-10 0-20-12zM80 172q20 5 40 0M78 222v30M122 222v30"/>${dots}</svg>`;
+}
+function facePt(e){const r=e.currentTarget.getBoundingClientRect(),t=V.ptool;V.ses.points.push({x:Math.round((e.clientX-r.left)/r.width*200),y:Math.round((e.clientY-r.top)/r.height*260),t,q:PQ[t]});refreshPts();}
+function setPtQ(i,v){V.ses.points[i].q=parseFloat(v)||0;autoQty();$('#psum').textContent=ptSum();}
+function rmPt(i){V.ses.points.splice(i,1);refreshPts();}
+function autoQty(){if(V.ses.qtyMan)return;const u=protOf(V.ses.proc).unit,s=sum(V.ses.points.filter(p=>PU[p.t]===u),p=>p.q);if(s){V.ses.qty=+s.toFixed(2);const e=$('#f_qty');if(e)e.value=V.ses.qty;}}
+function refreshPts(){$('#fmap').innerHTML=faceSvg(V.ses.points,true);$('#plist').innerHTML=ptList();autoQty();}
+function scrSession(){
+  const s=V.ses,pr=protOf(s.proc),p=pat(s.patient_id),rk=p?riskList(p):[];
+  const prev=s.isNew?(pr.rules||[]).map(r=>`<div class="kv"><span>${esc(r.label)}</span><b>${fdate(addDays(s.date,+r.days))}</b></div>`).join(''):'';
+  return `<div class="narrow"><div class="head"><button class="icon" onclick="backSes()" aria-label="Voltar">${ic('back',22)}</button><h1 class="sp">${s.isNew?'Nova sessão':'Sessão'}</h1>${s.isNew?'':`<button class="icon" onclick="delSes()" aria-label="Excluir">${ic('trash',20)}</button>`}</div>
+  ${rk.length?`<div class="banner red">Atenção na anamnese: ${esc(rk.join(' · '))}</div>`:''}
+  <div class="card"><label class="f" style="margin-top:0">Paciente</label><select onchange="V.ses.patient_id=this.value;render()">${opts([['','Selecione…'],...[...S.patients].sort((a,b)=>a.name.localeCompare(b.name,'pt-BR')).map(x=>[x.id,x.name])],s.patient_id)}</select>
+  <div class="grid2"><div><label class="f">Data</label><input type="date" value="${esc(s.date)}" onchange="V.ses.date=this.value;render()"></div><div><label class="f">Procedimento</label><select onchange="setProc(this.value)">${opts(S.protocols.map(x=>[x.key,x.name]),s.proc)}</select></div></div>
+  <label class="f">Produto do estoque (desconta a quantidade usada)</label><select onchange="pickStock(this.value)">${opts([['','Escolher do estoque…'],...S.stock.map(x=>[x.id,`${x.name} · lote ${x.lote||'—'} · ${x.qty} ${x.unit||''}`])],s.stock_id||'')}</select>
+  <div class="grid2"><div><label class="f">Produto / marca</label><input value="${esc(s.product)}" oninput="V.ses.product=this.value"></div><div><label class="f">Lote</label><input value="${esc(s.lote)}" oninput="V.ses.lote=this.value"></div></div>
+  <div class="grid2"><div><label class="f">Validade do lote</label><input type="date" value="${esc(s.validade)}" onchange="V.ses.validade=this.value"></div><div><label class="f">Quantidade usada (${esc(pr.unit)})</label><input id="f_qty" type="number" step="0.05" inputmode="decimal" value="${s.qty==null?'':s.qty}" oninput="V.ses.qty=this.value;V.ses.qtyMan=true"></div></div></div>
+  <div class="card mt"><h3>Mapa facial</h3><p class="muted" style="margin:4px 0 10px;font-size:13px">Escolha o tipo de produto e toque no rosto para marcar cada ponto. Ajuste a quantidade na lista.</p>
+   <div class="chips">${Object.entries(PT).map(([k,[l,c]])=>`<button class="chip ${V.ptool===k?'on':''}" onclick="V.ptool='${k}';render()"><i style="background:${c}"></i>${l}</button>`).join('')}</div>
+   <div class="mapwrap"><div id="fmap">${faceSvg(s.points,true)}</div><div id="plist">${ptList()}</div></div>
+   <label class="f">Regiões tratadas</label><input value="${esc(s.regions)}" oninput="V.ses.regions=this.value" placeholder="Ex.: glabela, frontal, periorbital"></div>
+  <div class="card mt"><div class="grid2"><div><label class="f" style="margin-top:0">Valor (R$)</label><input type="number" step="0.01" inputmode="decimal" value="${s.value==null?'':s.value}" oninput="V.ses.value=this.value"></div><div><label class="f" style="margin-top:0">Pagamento</label><select onchange="V.ses.pay=this.value">${opts([['pago','Pago'],['pendente','Pendente']],s.pay)}</select></div></div>
+   <label class="f">Forma de pagamento</label><select onchange="V.ses.method=this.value">${opts(METHODS,s.method)}</select></div>
+  <label class="f">Observações e intercorrências</label><textarea rows="3" oninput="V.ses.notes=this.value">${esc(s.notes)}</textarea>
+  <label class="f">Orientações pós-procedimento</label><textarea rows="4" oninput="V.ses.pos=this.value">${esc(s.pos)}</textarea>
+  ${prev?`<div class="card blush mt"><h3 class="mb">Retornos que serão criados</h3>${prev}</div>`:''}
+  <div class="actions wrap"><button class="btn line" onclick="printPos()">Imprimir orientações</button><button class="btn line" onclick="waPos()">${ic('send',16)} Orientações no WhatsApp</button></div>
+  <button class="btn rose block mt" onclick="saveSes()">Salvar sessão</button></div>`;
+}
+function posText(){const s=V.ses;return [s.pos,POS_ALARME].filter(Boolean).join('\n\n');}
+function waPos(){const s=V.ses,p=pat(s.patient_id);if(!p)return toast('Selecione o paciente.',true);window.open(waLink(p.phone,fill(tpl('pos'),{nome:p.name.split(' ')[0],procedimento:protName(s.proc),orientacoes:posText(),clinica:clinicName()})),'_blank');}
+function printPos(){const s=V.ses,p=pat(s.patient_id),c=CL();if(!p)return toast('Selecione o paciente.',true);printDoc(`<h1 style="font-size:22px">${esc(c.name||'Clínica')}</h1><p>${esc([c.prof,c.reg,c.phone].filter(Boolean).join(' · '))}</p><h2 style="margin-top:18px">Orientações pós-procedimento</h2><p>Paciente: <b>${esc(p.name)}</b> · ${esc(protName(s.proc))} · ${fdate(s.date)}${s.lote?' · lote '+esc(s.lote):''}</p><p>${esc(posText()).replace(/\n/g,'<br>')}</p><div class="sign"><div>Paciente</div><div>${esc(c.prof||'Profissional responsável')}</div></div>`);}
+function saveSes(){
+  const s=V.ses;if(!s.patient_id)return toast('Selecione o paciente.',true);
+  const p=pat(s.patient_id),rk=riskList(p);
+  if(s.isNew&&rk.length&&!confirm('Paciente com alertas na anamnese ('+rk.join(', ')+'). Registrar mesmo assim?'))return;
+  const {isNew,qtyMan,...row}=s,pr=protOf(row.proc);
+  row.value=+row.value||0;row.qty=+row.qty||0;row.unit=pr.unit;
+  if(isNew){
+    if(row.value>0){const t=up('tx',{id:uid(),type:'entrada',description:pr.name+' – '+p.name,category:CAT_IN.includes(pr.name)?pr.name:'Outros',value:row.value,date:row.date,status:row.pay==='pago'?'pago':'pendente',method:row.method,patient_id:p.id});row.tx_id=t.id;}
+    if(row.stock_id&&row.qty>0){const it=S.stock.find(x=>x.id===row.stock_id);if(it)up('stock',{id:it.id,qty:Math.max(0,+(it.qty-row.qty).toFixed(2))});}
+    up('sessions',row);const made=genRetornos(row);
+    modal(`<h2>Sessão registrada</h2>${made.length?`<p class="muted">Retornos criados automaticamente:</p>${made.map(r=>`<div class="kv"><span>${esc(r.label)}</span><b>${fdate(r.due)}</b></div>`).join('')}`:'<p class="muted">Este procedimento não tem regra de retorno.</p>'}
+    <div class="actions wrap"><button class="btn ghost" onclick="waPos();">${ic('send',16)} Enviar orientações</button><button class="btn" onclick="closeModal();backSes()">Concluir</button></div>`);
+    toast('Sessão salva.');
+  }else{
+    up('sessions',row);
+    if(row.tx_id&&S.tx.find(x=>x.id===row.tx_id))up('tx',{id:row.tx_id,value:row.value,status:row.pay==='pago'?'pago':'pendente',method:row.method});
+    toast('Sessão atualizada.');backSes();
+  }
+}
+function delSes(){if(!confirm('Excluir esta sessão e os retornos gerados por ela? O estoque não é devolvido.'))return;const id=V.ses.id;S.retornos=S.retornos.filter(r=>r.session_id!==id);rm('sessions',id);toast('Sessão excluída.');backSes();}
+
+/* ---------- fotos ---------- */
+function tabFotos(p){
+  const l=S.photos.filter(x=>x.patient_id===p.id).sort((a,b)=>(b.date||'').localeCompare(a.date||'')||(b.created_at||'').localeCompare(a.created_at||''));
+  return `<p class="hint" style="margin-top:0">Registre antes e depois no mesmo ângulo e com a mesma iluminação. Marque duas fotos para comparar.</p>
+  <div class="seg mb">${[['antes','Antes'],['depois','Depois'],['outro','Outra']].map(([k,t])=>`<button class="${V.pkind===k?'on':''}" onclick="V.pkind='${k}';render()">${t}</button>`).join('')}</div>
+  <div class="row mb" style="flex-wrap:wrap"><button class="btn" onclick="$('#phfile').click()">${ic('camera',16)} Adicionar foto (${V.pkind})</button><button class="btn ghost" ${V.sel.length===2?'':'disabled'} onclick="compareModal()">Comparar (${V.sel.length}/2)</button></div>
+  <input id="phfile" type="file" accept="image/*" multiple hidden onchange="onPhotos('${p.id}',this)">
+  ${l.length?`<div class="att-grid">${l.map(x=>`<div class="att-card" onclick="photoView('${x.id}')"><div class="th"><img data-img="${x.id}" alt=""></div><input type="checkbox" ${V.sel.includes(x.id)?'checked':''} onclick="event.stopPropagation();selPhoto('${x.id}')"><div class="cap"><b>${x.kind==='antes'?'Antes':x.kind==='depois'?'Depois':'Foto'}</b><small>${fdate(x.date)}</small></div></div>`).join('')}</div>`:empty('Nenhuma foto ainda.')}`;
+}
+async function onPhotos(pid,inp){
+  const fs=[...inp.files];inp.value='';if(!fs.length)return;toast('Enviando…');
+  for(const f of fs){try{const b=await compress(f,1400,.78),id=uid();await imgPut(id,b);up('photos',{id,patient_id:pid,kind:V.pkind,date:today()});}catch(e){toast('Falha em '+f.name+': '+e.message,true);}}
+  render();toast('Fotos salvas.');
+}
+function selPhoto(id){const i=V.sel.indexOf(id);if(i>=0)V.sel.splice(i,1);else{if(V.sel.length>=2)V.sel.shift();V.sel.push(id);}render();}
+function photoView(id){const x=S.photos.find(y=>y.id===id);modal(`<h2>${x.kind==='antes'?'Antes':x.kind==='depois'?'Depois':'Foto'} · ${fdate(x.date)}</h2><img data-img="${id}" alt="" style="max-width:100%;max-height:68vh;border-radius:14px;display:block;margin:10px auto"><div class="actions"><button class="btn line" onclick="closeModal()">Fechar</button><button class="btn danger" onclick="delPhoto('${id}')">Excluir</button></div>`);}
+function delPhoto(id){if(!confirm('Excluir esta foto?'))return;imgDel(id);rm('photos',id);V.sel=V.sel.filter(x=>x!==id);closeModal();render();}
+function compareModal(){
+  const [a,b]=V.sel,A=S.photos.find(x=>x.id===a),B=S.photos.find(x=>x.id===b);
+  modal(`<h2>Comparar fotos</h2><div class="cmp mt"><img data-img="${b}" alt=""><img id="cmpA" data-img="${a}" alt="" style="clip-path:inset(0 50% 0 0)"><span class="lb" style="left:10px">${fdate(A.date)}</span><span class="lb" style="right:10px">${fdate(B.date)}</span></div>
+  <input class="cmp-r" type="range" min="0" max="100" value="50" oninput="$('#cmpA').style.clipPath='inset(0 '+(100-this.value)+'% 0 0)'" aria-label="Deslizar comparação"><div class="actions"><button class="btn line" onclick="closeModal()">Fechar</button></div>`);
+}
+
+/* ---------- retornos do paciente ---------- */
+function tabRetP(p){const l=S.retornos.filter(r=>r.patient_id===p.id).sort((a,b)=>a.due.localeCompare(b.due));return l.length?lst(l.map(retRow).join('')):empty('Nenhum retorno. Eles são criados automaticamente ao salvar uma sessão.');}
+
+/* ================= retornos ================= */
+function retRow(r){
+  const p=pat(r.patient_id)||{},open=OPEN.includes(r.status),n=dd(r.due,today()),cls=!open?'gray':n<0?'red':n===0?'warn':'';
+  return item({av:avIn(p),t:esc(p.name),s:esc(protName(r.proc))+' · '+esc(r.label),r:`${fdate(r.due)}<span class="tag ${cls}">${open?rel(r.due):RST[r.status][0]}</span>${open&&r.status!=='pendente'?`<span class="tag ${RST[r.status][1]}">${RST[r.status][0]}</span>`:''}`,click:`retModal('${r.id}')`});
+}
+function inativos(){const lim=+(S.cfg.inativo||180);return S.patients.map(p=>{const d=S.sessions.filter(s=>s.patient_id===p.id).map(s=>s.date).sort();return {p,last:d[d.length-1]};}).filter(x=>x.last&&dd(today(),x.last)>=lim&&!rOpen().some(r=>r.patient_id===x.p.id)).sort((a,b)=>a.last.localeCompare(b.last));}
+function scrRet(){
+  const t=today(),tabs=[['abertos','Retornos'],['reativ','Reativação'],['hist','Histórico']];
+  let body='';
+  if(V.rtab==='abertos'){
+    const f=V.rfilter,l=rOpen().filter(r=>f==='todos'||(f==='alerta'?r.due<=t:r.due<=addDays(t,+f))).sort((a,b)=>a.due.localeCompare(b.due));
+    const fl=[['alerta','Atrasados e hoje'],['7','Próx. 7 dias'],['30','Próx. 30 dias'],['todos','Todos']];
+    body=`<div class="chips">${fl.map(([k,l2])=>`<button class="chip ${f===k?'on':''}" onclick="V.rfilter='${k}';render()">${l2}</button>`).join('')}</div>`+(l.length?lst(l.map(retRow).join('')):empty('Nenhum retorno neste filtro.'));
+  }else if(V.rtab==='reativ'){
+    const l=inativos();
+    body=`<p class="hint" style="margin-top:0">Pacientes sem sessão há ${S.cfg.inativo||180} dias ou mais e sem retorno em aberto. Ajuste o prazo em “Clínica e mensagens”.</p>`+(l.length?lst(l.map(x=>item({av:avIn(x.p),t:esc(x.p.name),s:'Última sessão em '+fdate(x.last),r:`<span class="tag warn">${dd(t,x.last)} dias</span>`,click:`reativModal('${x.p.id}')`})).join('')):empty('Nenhum paciente inativo no momento.'));
+  }else{
+    const l=S.retornos.filter(r=>!OPEN.includes(r.status)).sort((a,b)=>b.due.localeCompare(a.due)).slice(0,60);
+    body=l.length?lst(l.map(retRow).join('')):empty('Nenhum retorno concluído ou descartado ainda.');
+  }
+  const perm='Notification' in window?Notification.permission:'unsupported';
+  return head('Retornos')+(perm==='default'?`<button class="banner rose" onclick="askNotif()">Ative as notificações para ser avisado dos retornos do dia ao abrir o app.</button>`:'')+
+  `<div class="seg mb">${tabs.map(([k,l])=>`<button class="${V.rtab===k?'on':''}" onclick="V.rtab='${k}';render()">${l}</button>`).join('')}</div>${body}`;
+}
+function retModal(id){
+  const r=S.retornos.find(x=>x.id===id),p=pat(r.patient_id)||{},open=OPEN.includes(r.status);
+  const msg=fill(tpl('retorno'),{nome:(p.name||'').split(' ')[0],clinica:clinicName(),procedimento:protName(r.proc),retorno:r.label,data:fdate(r.due)});
+  modal(`<h2>${esc(p.name)}</h2><p class="muted" style="margin:0">${esc(protName(r.proc))} · ${esc(r.label)}</p>
+  <div class="kv mt"><span>Previsto para</span><b>${fdate(r.due)} (${rel(r.due)})</b></div><div class="kv"><span>Situação</span><b><span class="tag ${RST[r.status][1]}">${RST[r.status][0]}</span></b></div>
+  <label class="f">Mensagem de WhatsApp</label><textarea id="f_msg" rows="4">${esc(msg)}</textarea>
+  <div class="actions wrap"><button class="btn rose" onclick="retWa('${id}')">${ic('send',16)} WhatsApp</button><button class="btn ghost" onclick="closeModal();apptForm('','${r.patient_id}','${r.due<today()?today():r.due}','09:00','${id}')">Agendar</button></div>
+  ${open?`<label class="f">Adiar o retorno</label><div class="actions" style="margin-top:0"><button class="btn line sm" onclick="retDelay('${id}',7)">+7 dias</button><button class="btn line sm" onclick="retDelay('${id}',15)">+15 dias</button><button class="btn line sm" onclick="retDelay('${id}',30)">+30 dias</button></div>
+  <div class="actions wrap"><button class="btn ok" onclick="retSet('${id}','concluido')">Marcar como concluído</button><button class="btn danger" onclick="retSet('${id}','descartado')">Descartar</button></div>`:`<div class="actions"><button class="btn ghost" onclick="retSet('${id}','pendente')">Reabrir</button></div>`}
+  <div class="actions"><button class="btn line" onclick="closeModal();openPatient('${r.patient_id}')">Abrir paciente</button><button class="btn line" onclick="closeModal()">Fechar</button></div>`);
+}
+function retWa(id){const r=S.retornos.find(x=>x.id===id),p=pat(r.patient_id)||{};if(r.status==='pendente')up('retornos',{id,status:'contatado'});window.open(waLink(p.phone,$('#f_msg').value),'_blank');closeModal();render();}
+function retSet(id,st){up('retornos',{id,status:st,done_at:st==='concluido'?today():null});closeModal();render();toast('Retorno atualizado.');}
+function retDelay(id,n){up('retornos',{id,due:addDays(today(),n),status:'pendente'});closeModal();render();toast('Retorno adiado.');}
+function reativModal(pid){const p=pat(pid),msg=fill(tpl('reativ'),{nome:p.name.split(' ')[0],clinica:clinicName()});modal(`<h2>${esc(p.name)}</h2><label class="f">Mensagem de reativação</label><textarea id="f_msg" rows="4">${esc(msg)}</textarea><div class="actions wrap"><button class="btn rose" onclick="window.open(waLink('${esc(p.phone||'')}',$('#f_msg').value),'_blank')">${ic('send',16)} WhatsApp</button><button class="btn ghost" onclick="closeModal();apptForm('','${pid}')">Agendar</button></div><div class="actions"><button class="btn line" onclick="closeModal()">Fechar</button></div>`);}
+
+/* ================= agenda ================= */
+function apptRow(a){const s=AST[a.status]||AST.agendado;return item({av:esc(a.time||'—'),t:esc(pname(a.patient_id)),s:esc(a.proc||'Consulta')+(V.screen!=='agenda'?' · '+fdate(a.date):''),r:`<span class="tag ${s[1]}">${s[0]}</span>`,click:`apptForm('${a.id}')`});}
+function scrAgenda(){
+  const dt=new Date(V.adate+'T00:00:00'),y=dt.getFullYear(),m=dt.getMonth(),first=new Date(y,m,1),dim=new Date(y,m+1,0).getDate(),rows=Math.ceil((first.getDay()+dim)/7),t=today();
+  let cells='';
+  for(let i=0;i<rows*7;i++){
+    const d=new Date(y,m,1-first.getDay()+i),ds=iso(d),l=apptsOn(ds),off=d.getMonth()!==m;
+    cells+=`<div class="cd ${off?'off':''} ${ds===t?'today':''}" onclick="dayModal('${ds}')"><span class="dn">${d.getDate()}</span><div class="evs">${l.slice(0,3).map(a=>`<button class="ev st-${a.status}" onclick="event.stopPropagation();apptForm('${a.id}')">${esc(a.time||'')} ${esc(short(pname(a.patient_id)))}</button>`).join('')}${l.length>3?`<span class="more">+${l.length-3} mais</span>`:''}</div><div class="dots">${l.slice(0,5).map(a=>`<i class="dot st-${a.status}"></i>`).join('')}</div></div>`;
+  }
+  return head('Agenda',null,`<button class="btn" onclick="apptForm()">${ic('plus',16)} Agendar</button>`)+
+  `<div class="cal-tools"><div class="row"><button class="icon" onclick="V.adate=addMonths(V.adate,-1);render()" aria-label="Anterior">${ic('back',20)}</button><b class="ctitle">${MONTHS[m]} de ${y}</b><button class="icon" style="transform:scaleX(-1)" onclick="V.adate=addMonths(V.adate,1);render()" aria-label="Próximo">${ic('back',20)}</button></div><button class="btn ghost sm" onclick="V.adate=today();render()">Hoje</button></div>
+  <div class="cal"><div class="cal-h">${DOW.map(x=>`<div>${x}</div>`).join('')}</div><div class="cal-g">${cells}</div></div>
+  <div class="legend">${Object.entries(AST).map(([k,v])=>`<span class="st-${k}"><i></i>${v[0]}</span>`).join('')}</div>`;
+}
+function dayModal(d){const l=apptsOn(d);modal(`<h2>${fdate(d)}</h2><p class="muted" style="margin:0">${WD[new Date(d+'T00:00:00').getDay()]}${d===today()?' · hoje':''}</p><div class="mt">${l.length?l.map(a=>`<div style="margin-bottom:8px">${apptRow(a)}</div>`).join(''):empty('Nenhuma consulta neste dia.')}</div><div class="actions"><button class="btn line" onclick="closeModal()">Fechar</button><button class="btn" onclick="apptForm('','','${d}')">Agendar neste dia</button></div>`);}
+function apptForm(id,pid,date,time,rid){
+  if(!S.patients.length)return toast('Cadastre um paciente antes de agendar.',true);
+  const r=rid?S.retornos.find(x=>x.id===rid):null;
+  const a=S.appts.find(x=>x.id===id)||{date:date||V.adate||today(),time:time||'09:00',duration:30,status:'agendado',patient_id:pid||(r&&r.patient_id)||'',proc:r?protName(r.proc)+' – '+r.label:'',retorno_id:rid||''};
+  const p=pat(a.patient_id)||{},msg=fill(tpl('lembrete'),{nome:(p.name||'').split(' ')[0],data:fdate(a.date),hora:a.time||'',clinica:clinicName()});
+  modal(`<h2>${id?'Editar consulta':'Nova consulta'}</h2><input type="hidden" id="f_rid" value="${esc(a.retorno_id)}">
+  <label class="f">Paciente</label><select id="f_patient_id">${opts([['','Selecione…'],...[...S.patients].sort((x,y)=>x.name.localeCompare(y.name,'pt-BR')).map(x=>[x.id,x.name])],a.patient_id)}</select>
+  <div class="grid2"><div><label class="f">Data</label><input id="f_date" type="date" value="${esc(a.date)}"></div><div><label class="f">Hora</label><input id="f_time" type="time" value="${esc(a.time)}"></div></div>
+  <div class="grid2"><div><label class="f">Duração</label><select id="f_duration">${opts([['15','15 min'],['30','30 min'],['45','45 min'],['60','1 hora'],['90','1h30'],['120','2 horas']],String(a.duration||30))}</select></div><div><label class="f">Situação</label><select id="f_status">${opts(Object.entries(AST).map(([k,v])=>[k,v[0]]),a.status)}</select></div></div>
+  <label class="f">Procedimento / motivo</label><input id="f_proc" list="dl_p" value="${esc(a.proc)}" autocomplete="off"><datalist id="dl_p">${S.protocols.map(x=>`<option value="${esc(x.name)}">`).join('')}</datalist>
+  <div class="actions">${id?`<button class="btn danger" onclick="delAppt('${id}')">Excluir</button>`:`<button class="btn line" onclick="closeModal()">Cancelar</button>`}<button class="btn" onclick="saveAppt('${id||''}')">Salvar consulta</button></div>
+  ${id?`<a class="btn line block mt" href="${waLink(p.phone,msg)}" target="_blank" rel="noopener">Enviar lembrete no WhatsApp</a><button class="btn ghost block mt" onclick="closeModal();newSession('${a.patient_id}')">Registrar sessão deste paciente</button>`:''}`);
+}
+function saveAppt(id){
+  if(!val('patient_id'))return toast('Selecione o paciente.',true);if(!val('date'))return toast('Informe a data.',true);
+  const rid=val('rid'),st=val('status');
+  up('appts',{id:id||uid(),patient_id:val('patient_id'),date:val('date'),time:val('time'),duration:parseInt(val('duration'))||30,proc:val('proc'),status:st,retorno_id:rid||null});
+  if(rid&&S.retornos.find(x=>x.id===rid))up('retornos',{id:rid,status:st==='concluido'?'concluido':(st==='cancelado'||st==='faltou')?'pendente':'agendado',done_at:st==='concluido'?today():null});
+  V.adate=val('date');closeModal();render();toast('Consulta salva.');
+}
+function delAppt(id){if(!confirm('Excluir esta consulta?'))return;const a=S.appts.find(x=>x.id===id);if(a&&a.retorno_id&&S.retornos.find(x=>x.id===a.retorno_id))up('retornos',{id:a.retorno_id,status:'pendente'});rm('appts',id);closeModal();render();toast('Excluída.');}
+
+/* ================= estoque ================= */
+function scrStock(){
+  const al=sAlerts(),l=[...S.stock].sort((a,b)=>(a.validade||'9999').localeCompare(b.validade||'9999'));
+  return head('Estoque e lotes',null,`<button class="btn" onclick="stockForm()">${ic('plus',16)} Novo lote</button>`)+
+  `<p class="hint" style="margin-top:0">Cada lote usado em uma sessão fica registrado no prontuário, o que garante a rastreabilidade do produto.</p>`+
+  (l.length?lst(l.map(s=>{const f=(al.find(x=>x.s.id===s.id)||{f:[]}).f;return item({av:ic('box',18),t:esc(s.name)+(s.brand?' · '+esc(s.brand):''),s:'Lote '+esc(s.lote||'—')+' · validade '+(fdate(s.validade)||'—'),r:`${s.qty} ${esc(s.unit||'')}${f.map(x=>`<span class="tag red">${x}</span>`).join('')}`,click:`stockForm('${s.id}')`});}).join('')):empty('Nenhum lote cadastrado. Cadastre seus produtos para controlar validade e estoque mínimo.'));
+}
+function stockForm(id){
+  const s=S.stock.find(x=>x.id===id)||{unit:'U'};
+  modal(`<h2>${id?'Editar lote':'Novo lote'}</h2><label class="f">Produto</label><input id="f_name" list="dl_s" value="${esc(s.name)}" autocomplete="off"><datalist id="dl_s">${['Toxina botulínica 50U','Toxina botulínica 100U','Ácido hialurônico 1 mL','Bioestimulador de colágeno','Skinbooster','Fios de PDO'].map(x=>`<option value="${x}">`).join('')}</datalist>
+  <div class="grid2"><div><label class="f">Marca</label><input id="f_brand" value="${esc(s.brand)}"></div><div><label class="f">Lote</label><input id="f_lote" value="${esc(s.lote)}"></div></div>
+  <div class="grid2"><div><label class="f">Validade</label><input id="f_validade" type="date" value="${esc(s.validade)}"></div><div><label class="f">Unidade</label><select id="f_unit">${opts(['U','mL','un','sessão'],s.unit)}</select></div></div>
+  <div class="grid2"><div><label class="f">Quantidade em estoque</label><input id="f_qty" type="number" step="0.05" inputmode="decimal" value="${s.qty==null?'':s.qty}"></div><div><label class="f">Estoque mínimo (alerta)</label><input id="f_min" type="number" step="0.05" inputmode="decimal" value="${s.min==null?'':s.min}"></div></div>
+  <div class="actions">${id?`<button class="btn danger" onclick="delStock('${id}')">Excluir</button>`:`<button class="btn line" onclick="closeModal()">Cancelar</button>`}<button class="btn" onclick="saveStock('${id||''}')">Salvar</button></div>`);
+}
+function saveStock(id){const name=val('name').trim();if(!name)return toast('Informe o produto.',true);up('stock',{id:id||uid(),name,brand:val('brand'),lote:val('lote'),validade:val('validade'),unit:val('unit'),qty:num('qty'),min:num('min')});closeModal();render();toast('Lote salvo.');}
+function delStock(id){if(!confirm('Excluir este lote?'))return;rm('stock',id);closeModal();render();}
+
+/* ================= financeiro ================= */
+function txRow(x){const late=x.status==='pendente'&&x.date&&x.date<today(),inn=x.type==='entrada';return item({av:inn?'+':'−',cls:inn?'in':'out',t:esc(x.description),s:fdate(x.date)+' · '+esc(x.category||'Sem categoria')+(x.patient_id?' · '+esc(pname(x.patient_id)):''),r:`<span class="${inn?'pos':'neg'}">${inn?'':'− '}${money(x.value)}</span>${x.status==='pendente'?`<span class="tag ${late?'red':'warn'}">${late?'Vencido':'Pendente'}</span>`:''}`,click:`txForm('${x.id}')`});}
+function scrFin(){
+  const m=V.month,all=S.tx.filter(x=>(x.date||'').slice(0,7)===m),pg=t=>sum(all.filter(x=>x.type===t&&x.status==='pago')),pd=t=>sum(all.filter(x=>x.type===t&&x.status==='pendente'));
+  let l=all;if(V.ftype==='entrada'||V.ftype==='despesa')l=all.filter(x=>x.type===V.ftype);else if(V.ftype==='pendente')l=all.filter(x=>x.status==='pendente');
+  l=[...l].sort((a,b)=>(b.date||'').localeCompare(a.date||''));const saldo=pg('entrada')-pg('despesa');
+  return head('Financeiro',null,`<button class="btn" onclick="txForm('','entrada')">${ic('plus',16)} Entrada</button><button class="btn ghost" onclick="txForm('','despesa')">${ic('plus',16)} Despesa</button>`)+
+  `<div class="cal-tools"><div class="row"><button class="icon" onclick="V.month=shiftMonth(V.month,-1);render()" aria-label="Mês anterior">${ic('back',20)}</button><b class="ctitle">${mlabel(m)}</b><button class="icon" style="transform:scaleX(-1)" onclick="V.month=shiftMonth(V.month,1);render()" aria-label="Próximo mês">${ic('back',20)}</button></div></div>
+  <div class="grid4"><div class="card blush stat"><span>Saldo do mês (pago)</span><b class="${saldo>=0?'pos':'neg'}">${money(saldo)}</b></div><div class="card stat"><span>Entradas recebidas</span><b class="pos">${money(pg('entrada'))}</b><small>A receber: ${money(pd('entrada'))}</small></div><div class="card stat"><span>Despesas pagas</span><b class="neg">${money(pg('despesa'))}</b><small>A pagar: ${money(pd('despesa'))}</small></div></div>
+  <div class="chips mt">${[['todas','Todos'],['entrada','Entradas'],['despesa','Despesas'],['pendente','Pendentes']].map(([k,t])=>`<button class="chip ${V.ftype===k?'on':''}" onclick="V.ftype='${k}';render()">${t}</button>`).join('')}</div>
+  ${l.length?lst(l.map(txRow).join('')):empty('Nenhum lançamento neste filtro.')}`;
+}
+const catOpts=(t,s)=>opts(t==='entrada'?CAT_IN:CAT_OUT,s);
+function txForm(id,type){
+  const x=S.tx.find(y=>y.id===id)||{type:type||'entrada',status:'pago',date:today(),patient_id:'',method:'Pix'};V.txType=x.type;
+  modal(`<h2>${id?'Editar lançamento':'Novo lançamento'}</h2><div class="seg"><button id="tt_entrada" class="${x.type==='entrada'?'on':''}" onclick="setTxType('entrada')">Entrada</button><button id="tt_despesa" class="${x.type==='despesa'?'on':''}" onclick="setTxType('despesa')">Despesa</button></div>
+  <label class="f">Descrição</label><input id="f_description" value="${esc(x.description)}" autocomplete="off">
+  <div class="grid2"><div><label class="f">Valor (R$)</label><input id="f_value" type="number" step="0.01" inputmode="decimal" value="${x.value==null?'':x.value}"></div><div><label class="f">Data</label><input id="f_date" type="date" value="${esc(x.date)}"></div></div>
+  <div class="grid2"><div><label class="f">Categoria</label><select id="f_category">${catOpts(x.type,x.category)}</select></div><div><label class="f">Situação</label><select id="f_status">${opts([['pago','Pago'],['pendente','Pendente']],x.status)}</select></div></div>
+  <div class="grid2"><div><label class="f">Forma de pagamento</label><select id="f_method">${opts(['',...METHODS],x.method||'')}</select></div><div><label class="f">Paciente</label><select id="f_patient_id">${opts([['','—'],...S.patients.map(p=>[p.id,p.name])],x.patient_id||'')}</select></div></div>
+  <div class="actions">${id?`<button class="btn danger" onclick="delTx('${id}')">Excluir</button>`:`<button class="btn line" onclick="closeModal()">Cancelar</button>`}<button class="btn" onclick="saveTx('${id||''}')">Salvar</button></div>
+  ${id&&x.status==='pendente'?`<button class="btn ghost block mt" onclick="up('tx',{id:'${id}',status:'pago'});closeModal();render();toast('Baixa registrada.')">Marcar como ${x.type==='entrada'?'recebido':'pago'}</button>`:''}`);
+}
+function setTxType(t){V.txType=t;$('#tt_entrada').classList.toggle('on',t==='entrada');$('#tt_despesa').classList.toggle('on',t==='despesa');$('#f_category').innerHTML=catOpts(t,'');}
+function saveTx(id){const description=val('description').trim(),value=num('value');if(!description)return toast('Informe a descrição.',true);if(value<=0)return toast('Informe um valor maior que zero.',true);up('tx',{id:id||uid(),type:V.txType,description,value,date:val('date')||today(),category:val('category'),status:val('status'),method:val('method'),patient_id:val('patient_id')||null});closeModal();render();toast('Lançamento salvo.');}
+function delTx(id){if(!confirm('Excluir este lançamento?'))return;rm('tx',id);closeModal();render();}
+
+/* ================= relatórios ================= */
+function group(list,f){const m={};list.forEach(x=>{const k=f(x)||'Sem categoria';m[k]=(m[k]||0)+(+x.value||0);});return Object.entries(m).sort((a,b)=>b[1]-a[1]);}
+function hbars(arr){if(!arr.length)return '<p class="muted" style="margin:6px 0 0">Sem dados no período.</p>';const mx=arr[0][1]||1;return arr.slice(0,7).map(([k,v])=>`<div class="hb"><span title="${esc(k)}">${esc(k)}</span><div class="bar"><i style="width:${Math.max(3,v/mx*100)}%"></i></div><b>${money(v)}</b></div>`).join('');}
+function scrReports(){
+  const end=today().slice(0,7),start=shiftMonth(end,-(V.period-1)),inR=d=>{const m=(d||'').slice(0,7);return m>=start&&m<=end;};
+  const ss=S.sessions.filter(s=>inR(s.date)),pg=S.tx.filter(x=>inR(x.date)&&x.status==='pago'),ent=sum(pg.filter(x=>x.type==='entrada')),desp=sum(pg.filter(x=>x.type==='despesa'));
+  const venc=S.retornos.filter(r=>inR(r.due)&&r.due<=today()),feitos=venc.filter(r=>r.status==='concluido').length,perdidos=venc.filter(r=>r.status==='descartado'||(OPEN.includes(r.status)&&dd(today(),r.due)>30)).length;
+  const prods={};ss.forEach(s=>{if(s.product){prods[s.product]=prods[s.product]||{n:0};prods[s.product].n++;}});
+  return head('Relatórios',"nav('more')",`<button class="btn ghost" onclick="exportCsv()">${ic('save',16)} Rastreabilidade (CSV)</button>`)+
+  `<div class="chips">${[[1,'Este mês'],[3,'3 meses'],[6,'6 meses'],[12,'12 meses']].map(([n,t])=>`<button class="chip ${V.period===n?'on':''}" onclick="V.period=${n};render()">${t}</button>`).join('')}</div>
+  <div class="grid4"><div class="card blush stat"><span>Entradas recebidas</span><b class="pos">${money(ent)}</b></div><div class="card stat"><span>Despesas pagas</span><b class="neg">${money(desp)}</b></div><div class="card stat"><span>Sessões</span><b>${ss.length}</b><small>Ticket médio ${money(ss.length?sum(ss,s=>s.value)/ss.length:0)}</small></div><div class="card stat"><span>Retornos vencidos no período</span><b>${venc.length?Math.round(feitos/venc.length*100):0}%</b><small>${feitos} realizados · ${perdidos} perdidos</small></div></div>
+  <div class="cols"><div class="card"><h3>Faturamento por procedimento</h3>${hbars(group(ss,s=>protName(s.proc)))}</div>
+  <div class="card"><h3>Entradas por forma de pagamento</h3>${hbars(group(pg.filter(x=>x.type==='entrada'),x=>x.method))}</div>
+  <div class="card"><h3>Despesas por categoria</h3>${hbars(group(pg.filter(x=>x.type==='despesa'),x=>x.category))}</div>
+  <div class="card"><h3>Produtos mais usados</h3>${Object.keys(prods).length?Object.entries(prods).sort((a,b)=>b[1].n-a[1].n).slice(0,7).map(([k,v])=>`<div class="kv"><span>${esc(k)}</span><b>${v.n}×</b></div>`).join(''):'<p class="muted" style="margin:6px 0 0">Sem dados no período.</p>'}</div>
+  <div class="card"><h3>Pacientes</h3><div class="kv"><span>Cadastrados</span><b>${S.patients.length}</b></div><div class="kv"><span>Novos no período</span><b>${S.patients.filter(p=>inR(p.created_at)).length}</b></div><div class="kv"><span>Inativos para reativar</span><b>${inativos().length}</b></div><div class="kv"><span>Recebimentos em atraso</span><b class="${S.tx.some(x=>x.type==='entrada'&&x.status==='pendente'&&x.date<today())?'neg':''}">${money(sum(S.tx.filter(x=>x.type==='entrada'&&x.status==='pendente'&&x.date&&x.date<today())))}</b></div></div></div>`;
+}
+function exportCsv(){
+  const q=v=>'"'+String(v==null?'':v).replace(/"/g,'""')+'"',rows=[...S.sessions].sort((a,b)=>a.date.localeCompare(b.date));
+  const csv='\uFEFF'+['Data','Paciente','Procedimento','Produto','Lote','Validade','Quantidade','Unidade','Regiões','Valor'].map(q).join(';')+'\n'+rows.map(s=>[fdate(s.date),pname(s.patient_id),protName(s.proc),s.product,s.lote,fdate(s.validade),String(s.qty||'').replace('.',','),s.unit,s.regions,String(s.value||0).replace('.',',')].map(q).join(';')).join('\n');
+  download('rastreabilidade-sessoes.csv',csv,'text/csv;charset=utf-8');
+}
+
+/* ================= protocolos ================= */
+function scrProt(){return head('Protocolos e retornos',"nav('more')",`<button class="btn" onclick="protForm()">${ic('plus',16)} Novo</button>`)+`<p class="hint" style="margin-top:0">Os prazos de retorno são sugestões iniciais. Ajuste conforme o seu protocolo clínico. Cada regra gera um retorno automático ao registrar uma sessão.</p>`+lst(S.protocols.map(p=>item({av:ic('spark',18),t:esc(p.name),s:(p.rules||[]).map(r=>esc(r.label)+' em '+r.days+'d').join(' · ')||'Sem retorno automático',r:p.price?money(p.price):'',click:`protForm('${p.key}')`})).join(''));}
+function protForm(key){
+  const p=S.protocols.find(x=>x.key===key);V.prot=p?JSON.parse(JSON.stringify(p)):{key:'p'+Date.now().toString(36),name:'',unit:'un',price:0,rules:[{label:'Retorno',days:30,nova:false}],pos:'',isNew:true};protModal();
+}
+function protModal(){
+  const p=V.prot;
+  modal(`<h2>${p.isNew?'Novo procedimento':'Editar protocolo'}</h2><label class="f">Nome</label><input value="${esc(p.name)}" oninput="V.prot.name=this.value">
+  <div class="grid2"><div><label class="f">Unidade</label><select onchange="V.prot.unit=this.value">${opts(['U','mL','un','sessão'],p.unit)}</select></div><div><label class="f">Valor padrão (R$)</label><input type="number" step="0.01" value="${p.price||0}" oninput="V.prot.price=parseFloat(this.value)||0"></div></div>
+  <label class="f">Regras de retorno (dias após a sessão)</label>
+  ${p.rules.map((r,i)=>`<div class="rule"><input value="${esc(r.label)}" oninput="V.prot.rules[${i}].label=this.value"><input type="number" min="1" value="${r.days}" oninput="V.prot.rules[${i}].days=parseInt(this.value)||1"><label class="chk" style="margin:0"><input type="checkbox" ${r.nova?'checked':''} onchange="V.prot.rules[${i}].nova=this.checked"> nova sessão</label><button class="icon sm" onclick="V.prot.rules.splice(${i},1);protModal()" aria-label="Remover">${ic('x',14)}</button></div>`).join('')}
+  <button class="btn ghost sm" onclick="V.prot.rules.push({label:'Retorno',days:30,nova:false});protModal()">+ Regra</button>
+  <p class="hint">“Nova sessão” significa que o retorno é concluído automaticamente quando uma nova sessão do mesmo procedimento é registrada para o paciente.</p>
+  <label class="f">Orientações pós-procedimento (texto padrão)</label><textarea rows="4" oninput="V.prot.pos=this.value">${esc(p.pos)}</textarea>
+  <div class="actions">${p.isNew?`<button class="btn line" onclick="closeModal()">Cancelar</button>`:`<button class="btn danger" onclick="delProt('${p.key}')">Excluir</button>`}<button class="btn" onclick="saveProt()">Salvar</button></div>`);
+}
+function saveProt(){const {isNew,...p}=V.prot;if(!p.name.trim())return toast('Informe o nome.',true);const i=S.protocols.findIndex(x=>x.key===p.key);if(i<0)S.protocols.push(p);else S.protocols[i]=p;persist();closeModal();render();toast('Protocolo salvo.');}
+function delProt(k){if(!confirm('Excluir este protocolo? Sessões antigas continuam no histórico.'))return;S.protocols=S.protocols.filter(x=>x.key!==k);persist();closeModal();render();}
+
+/* ================= mais / clínica / backup ================= */
+function scrMore(){
+  const m=(i,t,s,c)=>`<button class="menu" onclick="${c}"><span class="mi">${ic(i,22)}</span><span class="sp"><b>${t}</b><small>${s}</small></span>${ic('chev',18)}</button>`;
+  const perm='Notification' in window?Notification.permission:'unsupported',sa=sAlerts().length;
+  return head('Gestão')+lst(
+   m('box','Estoque e lotes',sa?sa+' alerta(s)':'Validade e estoque mínimo',"nav('stock')")+m('wallet','Financeiro','Entradas, despesas e pendências',"nav('fin')")+m('chart','Relatórios','Faturamento, retornos e rastreabilidade',"nav('reports')")+
+   m('repeat','Protocolos e retornos','Prazos de retorno e orientações por procedimento',"nav('prot')")+m('gear','Clínica e mensagens',esc(CL().name||'Nome, CRO/registro, modelos de WhatsApp'),'clinicForm()')+
+   m('bell','Notificações',perm==='granted'?'Ativadas neste navegador':perm==='denied'?'Bloqueadas no navegador':'Ativar avisos de retorno',perm==='granted'?'checkNotify(true);toast(\'Verificação feita.\')':'askNotif()')+
+   m('save','Exportar backup','Dados e fotos em um arquivo .json','exportBackup()')+m('send','Restaurar backup','Importa um arquivo .json exportado antes',"$('#bk').click()")+'<input id="bk" type="file" accept=".json,application/json" hidden onchange="importBackup(this)">'+
+   m('plus','Carregar dados de exemplo','Pacientes, retornos e estoque fictícios para testar','seedDemo()')+m('trash','Apagar todos os dados','Remove tudo deste aparelho','wipeAll()'))+
+  `<p class="hint">Os dados ficam somente neste navegador e aparelho. Exporte backups com frequência.</p>`;
+}
+function clinicForm(){
+  const c=CL();
+  modal(`<h2>Clínica e mensagens</h2><label class="f">Nome da clínica</label><input id="f_cname" value="${esc(c.name)}">
+  <div class="grid2"><div><label class="f">Profissional responsável</label><input id="f_cprof" value="${esc(c.prof)}"></div><div><label class="f">Registro profissional</label><input id="f_creg" value="${esc(c.reg)}"></div></div>
+  <label class="f">Telefone</label><input id="f_cphone" inputmode="tel" value="${esc(c.phone)}">
+  <label class="f">Considerar paciente inativo após (dias)</label><input id="f_cina" type="number" min="30" value="${S.cfg.inativo||180}">
+  <p class="hint">Variáveis das mensagens: {nome} {clinica} {procedimento} {retorno} {data} {hora} {orientacoes}</p>
+  <label class="f">Mensagem de retorno</label><textarea id="f_t1" rows="3">${esc(tpl('retorno'))}</textarea>
+  <label class="f">Mensagem pós-procedimento</label><textarea id="f_t2" rows="3">${esc(tpl('pos'))}</textarea>
+  <label class="f">Mensagem de reativação</label><textarea id="f_t3" rows="3">${esc(tpl('reativ'))}</textarea>
+  <label class="f">Lembrete de consulta</label><textarea id="f_t4" rows="3">${esc(tpl('lembrete'))}</textarea>
+  <div class="actions"><button class="btn line" onclick="closeModal()">Cancelar</button><button class="btn" onclick="saveClinic()">Salvar</button></div>`);
+}
+function saveClinic(){S.cfg.clinic={name:val('cname').trim(),prof:val('cprof').trim(),reg:val('creg').trim(),phone:val('cphone').trim()};S.cfg.inativo=+val('cina')||180;S.cfg.tpl={retorno:val('t1'),pos:val('t2'),reativ:val('t3'),lembrete:val('t4')};persist();closeModal();render();toast('Salvo.');}
+async function exportBackup(){
+  toast('Gerando backup…');const ids=[...S.photos.map(p=>p.id),...S.patients.filter(p=>p.avatar).map(p=>p.avatar)],imgs={};
+  for(const id of ids){try{const b=await imgGet(id);if(b)imgs[id]=await new Promise(r=>{const f=new FileReader();f.onload=()=>r(f.result);f.readAsDataURL(b);});}catch(e){}}
+  download('harmonizacao-backup-'+today()+'.json',JSON.stringify({S,imgs}),'application/json');
+}
+function importBackup(inp){
+  const f=inp.files[0];if(!f)return;const r=new FileReader();
+  r.onload=async()=>{try{const d=JSON.parse(r.result);if(!d.S||!confirm('Substituir os dados atuais pelo backup?'))return;S={patients:[],sessions:[],retornos:[],stock:[],appts:[],tx:[],protocols:[],photos:[],cfg:{},...d.S};for(const [id,url] of Object.entries(d.imgs||{}))await imgPut(id,await (await fetch(url)).blob());loadLocalFix();persist();render();toast('Backup restaurado.');}catch(e){toast('Arquivo inválido.',true);}};
+  r.readAsText(f);
+}
+function loadLocalFix(){if(!S.protocols.length)S.protocols=JSON.parse(JSON.stringify(DEF_PROT));}
+function wipeAll(){if(!confirm('Apagar TODOS os dados e fotos deste aparelho? Isso não pode ser desfeito.'))return;localStorage.removeItem(LS);try{indexedDB.deleteDatabase('harmo_img');}catch(e){}S={patients:[],sessions:[],retornos:[],stock:[],appts:[],tx:[],protocols:JSON.parse(JSON.stringify(DEF_PROT)),photos:[],cfg:{}};persist();nav('home');toast('Dados apagados.');}
+function seedDemo(){
+  if(!confirm('Adicionar dados fictícios de exemplo?'))return;
+  const mm=today().slice(5,7),mk=(name,phone,birth,an)=>up('patients',{id:uid(),name,phone,birth,an:an||{},termo:true,img:true});
+  const P=[mk('Ana Beatriz Souza','(62) 99111-2233','1991-'+mm+'-14'),mk('Camila Duarte','(62) 99222-3344','1987-03-02',{queloide:true}),mk('Marina Alves','(62) 99333-4455','1994-11-27'),mk('Juliana Prado','(62) 99444-5566','1980-07-19',{anticoag:true}),mk('Larissa Campos','(62) 99555-6677','1989-05-05')];
+  const ss=(i,dias,proc,v,prod)=>{const s={id:uid(),patient_id:P[i].id,date:addDays(today(),-dias),proc,product:prod,lote:'L'+(1000+dias),qty:proc==='toxina'?40:1,unit:protOf(proc).unit,points:[],regions:'',value:v,pay:'pago',method:'Pix',notes:'',pos:protOf(proc).pos};const t=up('tx',{id:uid(),type:'entrada',description:protName(proc)+' – '+P[i].name,category:'Outros',value:v,date:s.date,status:'pago',method:'Pix',patient_id:P[i].id});s.tx_id=t.id;up('sessions',s);genRetornos(s);};
+  ss(0,16,'toxina',1200,'Toxina 100U');ss(1,40,'preenchimento',1800,'AH 1 mL');ss(2,125,'toxina',1100,'Toxina 50U');ss(3,50,'bioestimulador',2500,'Bioestimulador');ss(4,200,'skinbooster',900,'Skinbooster');
+  up('stock',{id:uid(),name:'Toxina botulínica 100U',brand:'Marca A',lote:'A123',validade:addDays(today(),25),unit:'U',qty:60,min:20});
+  up('stock',{id:uid(),name:'Ácido hialurônico 1 mL',brand:'Marca B',lote:'B456',validade:addDays(today(),400),unit:'mL',qty:1,min:2});
+  const ap=(i,d,t,proc,st)=>up('appts',{id:uid(),patient_id:P[i].id,date:addDays(today(),d),time:t,duration:60,proc,status:st});
+  ap(0,0,'09:00','Avaliação / retoque','confirmado');ap(2,0,'14:30','Consulta','agendado');ap(1,2,'10:00','Manutenção','agendado');
+  render();toast('Dados de exemplo adicionados.');
+}
+
+/* ================= início do app ================= */
+loadLocal();render();checkNotify();
+setInterval(()=>checkNotify(),60000);
+document.addEventListener('visibilitychange',()=>{if(!document.hidden){checkNotify();if(['home','ret'].includes(V.screen))render();}});
+</script>
+</body>
+</html>
